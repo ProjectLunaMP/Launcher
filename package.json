@@ -5,6 +5,19 @@
   "main": "./out/main/index.js",
   "author": "zinx",
   "homepage": "https://electron-vite.org",
+  "build": {
+    "directories": {
+      "output": "dist"
+    },
+    "appId": "Luna",
+    "productName": "Luna",
+    "win": {},
+    "asar": true,
+    "files": [
+      "out/**/*",
+      "resources/**/*"
+    ]
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",
