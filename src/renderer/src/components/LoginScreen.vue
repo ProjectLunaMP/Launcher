@@ -8,7 +8,7 @@
      <a>You'll need to login in via Discord to use any of our in-game services.</a>
      <button>Proceed</button>
     </div>
-    <p class="NeedHelpYeah">Need help? Visit our <a href="penis.com">Support Server.</a></p>
+    <p class="NeedHelpYeah">Need help? Visit our <a href="https://discord.gg/nkQHAjgmzv">Support Server.</a></p>
   </div>
 </template>
 

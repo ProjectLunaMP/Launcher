@@ -47,6 +47,7 @@ html {
   width: 120px;
   position: absolute;
   right: 20px;
+  pointer-events: none;
 }
 
 .login-container a {
