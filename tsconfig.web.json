@@ -7,6 +7,7 @@
     "src/preload/*.d.ts"
   ],
   "compilerOptions": {
+    "sourceMap": false,
     "composite": true,
     "baseUrl": ".",
     "paths": {
