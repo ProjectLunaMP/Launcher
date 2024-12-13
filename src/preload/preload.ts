@@ -1,5 +1,5 @@
 import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import { ElectronAPI, electronAPI } from '@electron-toolkit/preload'
 /*
 declare global {
   interface Window {
@@ -8,7 +8,11 @@ declare global {
   }
 }
 */
-
+declare global {
+  interface Window {
+    electron: ElectronAPI
+  }
+}
 const api = {}
 
 console.log("dsaadsasdasdasadsdasdas")
