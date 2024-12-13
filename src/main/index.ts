@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-//import { update } from './updatecheck'
+import { update } from './updatecheck'
 
 function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/preload.js')
@@ -49,7 +49,7 @@ app.whenReady().then(() => {
 
   ipcMain.on('luna:update', async () => {
     console.log('TEST')
-    // update()
+     update()
   })
 
   ipcMain.on('ping', () => console.log('pong'))
