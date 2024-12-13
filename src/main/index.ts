@@ -37,6 +37,12 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  ipcMain.on('luna:update', async () => {
+    console.log('TEST')
+     update(mainWindow)
+  })
+
 }
 
 app.whenReady().then(() => {
@@ -47,10 +53,6 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  ipcMain.on('luna:update', async () => {
-    console.log('TEST')
-     update()
-  })
 
   ipcMain.on('ping', () => console.log('pong'))
 

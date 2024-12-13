@@ -3,7 +3,11 @@
 import { ref, onMounted } from 'vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import LoginScreen from './components/LoginScreen.vue'
+import OfflineScreen from './components/OfflineScreen.vue';
 
+const status = ref<{
+  status: string
+} | null>(null);; 
 const isLoading = ref(true)
 
 window.electron.ipcRenderer.send('luna:update')
@@ -12,11 +16,25 @@ window.electron.ipcRenderer.send('luna:update')
 
 // REMOVE FOR PROD THIS IS TO SKIP STUFF
 onMounted(() => {
-  isLoading.value = false
+ 
+  // wow
+  window.electron.ipcRenderer.on('update-status', (_, Newstatus) => {
+      console.log(`old ${status} / new ${Newstatus.status} status`);
+      status.value = Newstatus;
+  });
+  //isLoading.value = false
+
+  return {
+    status
+  }
 })
+
+
+
 </script>
 
 <template>
-  <LoginScreen v-if="!isLoading" />
+  <OfflineScreen :status="status" v-if="status?.status === 'offline' || status?.status === 'update-available'" />
+  <LoginScreen v-else-if="status?.status === 'online'" />
   <LoadingScreen v-else />
 </template>
