@@ -1,9 +1,12 @@
 <script setup lang="ts">
+
 import { ref, onMounted } from 'vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import LoginScreen from './components/LoginScreen.vue'
 
 const isLoading = ref(true)
+
+window.electron.ipcRenderer.send('luna:update')
 // WIP (seeing what i can do)
 //const ipcHandle = () => window.electron.ipcRenderer.send('ping') //  <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
 

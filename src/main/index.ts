@@ -2,23 +2,27 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+//import { update } from './updatecheck'
 
 function createWindow(): void {
+  const preloadPath = join(__dirname, '../preload/preload.js')
+  console.log('Preload script path:', preloadPath)
   const mainWindow = new BrowserWindow({
     width: 1270,
     height: 720,
     show: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      contextIsolation: true,
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/preload.js'),
+      contextIsolation: true, 
+      nodeIntegration: false,
       sandbox: false,
     },
-    resizable: false,
+    resizable: false
   })
-  
-  mainWindow.setMenu(null); // god
-  
+
+//  mainWindow.setMenu(null) // god
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
@@ -36,13 +40,17 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
+  console.log('dsad')
   electronApp.setAppUserModelId('com.luna')
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  ipcMain.on("update", () => console.log("UPDATE!!"));
+  ipcMain.on('luna:update', async () => {
+    console.log('TEST')
+    // update()
+  })
 
   ipcMain.on('ping', () => console.log('pong'))
 

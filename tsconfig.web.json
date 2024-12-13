@@ -7,6 +7,8 @@
     "src/preload/*.d.ts"
   ],
   "compilerOptions": {
+    "target": "ES6", 
+    "module": "commonjs",
     "sourceMap": false,
     "composite": true,
     "baseUrl": ".",
