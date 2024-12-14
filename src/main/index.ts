@@ -53,7 +53,7 @@ function createWindow(): void {
       update(mainWindow!)
     })
 
-    ipcMain.handle('luna:login', async () => {
+    ipcMain.handle('luna:login', () => {
       return login(authData!, mainWindow!)
     })
 
