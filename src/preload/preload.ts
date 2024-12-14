@@ -1,5 +1,6 @@
 import { contextBridge } from 'electron'
 import { ElectronAPI, electronAPI } from '@electron-toolkit/preload'
+//import { AuthData } from '../types/AuthData'
 /*
 declare global {
   interface Window {
@@ -10,15 +11,27 @@ declare global {
 */
 declare global {
   interface Window {
-    electron: ElectronAPI
+    electron: ElectronAPI,
+    data: {
+      //setAuthData: (data: { token: string, username: string }) => void;
+      getAuthData: () => Promise<{ token: string, username: string } | null>;
+    }
   }
 }
+
+
+
 const api = {}
 
 console.log("dsaadsasdasdasadsdasdas")
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('data', {
+     // onAuthData: (callback: (data: AuthData) => void) =>
+      //  electronAPI.ipcRenderer.on('luna:auth-data', (_, data: AuthData) => callback(data)),
+      getAuthData: () => electronAPI.ipcRenderer.invoke('luna:get-auth-data'),
+    })
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)

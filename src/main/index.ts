@@ -1,63 +1,154 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { update } from './updatecheck'
+import { AuthData } from '../types/AuthData'
+import { readTokenFromIni, saveTokenToIni } from './IniConfig'
+import axios from 'axios'
+
+let mainWindow: BrowserWindow | null
+let authData: AuthData | null = null
 
 function createWindow(): void {
+  //registerProtocol()
   const preloadPath = join(__dirname, '../preload/preload.js')
   console.log('Preload script path:', preloadPath)
-  const mainWindow = new BrowserWindow({
-    width: 1270,
-    height: 720,
-    show: false,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/preload.js'),
-      contextIsolation: true, 
-      nodeIntegration: false,
-      sandbox: false,
-    },
-    resizable: false
-  })
 
-//  mainWindow.setMenu(null) // god
+  if (!mainWindow) {
+    mainWindow = new BrowserWindow({
+      width: 1270,
+      height: 720,
+      show: false,
+      ...(process.platform === 'linux' ? { icon } : {}),
+      webPreferences: {
+        preload: join(__dirname, '../preload/preload.js'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: false
+      },
+      resizable: false
+    })
 
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
+    //  mainWindow.setMenu(null) // god
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
+    mainWindow.on('ready-to-show', () => {
+      mainWindow!.show()
+    })
 
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.webContents.setWindowOpenHandler((details) => {
+      shell.openExternal(details.url)
+      return { action: 'deny' }
+    })
+
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    } else {
+      mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    }
+
+    ipcMain.on('luna:update', async () => {
+      console.log('TEST')
+      update(mainWindow!)
+    })
+
+    ipcMain.handle('luna:login', async () => {
+      var TOKEN = readTokenFromIni()
+      console.log('TOKEN ' + TOKEN)
+      try {
+        const response = await axios.get('http://127.0.0.1:1111/launcher/api/v1/login', {
+          headers: {
+            Authorization: `${TOKEN}`
+          }
+        })
+
+        if (response.data) {
+          authData = response.data
+          if (authData) {
+            authData.AccessToken = TOKEN
+            console.log('SIMGA NIGMA ' + authData)
+            mainWindow!.webContents.send('IsLoggedIn', true);
+            //update-status
+            return authData
+          }
+          // sessionStorage.setItem('authData', JSON.stringify(response.data));
+        }
+      } catch (error) {
+        console.error('Error contacting backend:')
+      }
+
+      return null
+    })
+
+    ipcMain.on('luna:auth-data', (_, token: string, data: AuthData) => {
+      saveTokenToIni(token)
+      authData = data
+      if (authData) {
+        authData.AccessToken = token;
+        mainWindow!.webContents.send('IsLoggedIn', true);
+      }
+    })
+
+    ipcMain.handle('luna:get-auth-data', () => {
+      return authData
+    })
+    //ipcMain.on('luna:get-auth-data', async (_) => mainWindow!.webContents.send('AuthData', authData));
   }
-
-  ipcMain.on('luna:update', async () => {
-    console.log('TEST')
-     update(mainWindow)
-  })
-
 }
 
 app.whenReady().then(() => {
-  console.log('dsad')
+  console.log(mainWindow)
+
+  var requestSingleInstanceLock = app.requestSingleInstanceLock()
+  if (!requestSingleInstanceLock) {
+    app.quit()
+  } else {
+    app.on('second-instance', (event, argv) => {
+      event.preventDefault()
+      if (argv && argv.length > 1) {
+        const rawToken = argv.find((arg) => arg.startsWith('lunafn://'))
+
+        if (rawToken) {
+          const token = rawToken.replace('lunafn://', '').split('/')[0]
+          console.log('Token', token)
+          if (mainWindow) {
+            mainWindow.webContents.send('luna:token', token)
+            mainWindow.focus()
+          }
+        }
+      }
+    })
+  }
+
+  // this isnt inwdows
+  /* app.on('open-url', (event, url) => {
+    event.preventDefault()
+    const token = new URL(url).pathname.split('/')[1]
+    console.log('Token:', token)
+
+    ipcRenderer.send("luna:token", token)
+    if (mainWindow) {
+      mainWindow.webContents.send('protocol-token', token)
+      mainWindow.focus();
+    }
+  })*/
+
+  const appPathProd = resolve(app.getAppPath())
+
+  console.log('dsad ' + join(appPathProd, '../../Luna.exe'))
   electronApp.setAppUserModelId('com.luna')
+
+  app.setAsDefaultProtocolClient('LunaFN', join(appPathProd, '../../Luna.exe'))
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-
   ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 
+  console.log(mainWindow)
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })

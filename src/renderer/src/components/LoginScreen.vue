@@ -6,8 +6,9 @@
         <img src="../assets/stars.png" />
       </div>
       <a class="details">You'll need to login in via Discord to use any of our in-game services.</a>
-      <button>
-        Proceed
+      <button @click="handleProceed" :disabled="waitingForCallback">
+        <span v-if="waitingForCallback">Waiting for callback...</span>
+        <span v-else>Proceed</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -31,3 +32,21 @@
 </template>
 
 <style src="../assets/login.css"></style>
+
+<script>
+export default {
+  data() {
+    return {
+      waitingForCallback: false,
+    };
+  },
+  methods: {
+    handleProceed() {
+      this.waitingForCallback = true;
+
+      const discordLoginUrl = "https://discord.com/oauth2/authorize?client_id=1204822508373811282&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A2222%2Fauth%2Fapi%2Fv1%2Fcallback&scope=identify+email";
+      window.open(discordLoginUrl, "_blank");
+    },
+  },
+};
+</script>

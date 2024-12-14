@@ -16,6 +16,14 @@
     "files": [
       "out/**/*",
       "resources/**/*"
+    ],
+    "protocols": [
+      {
+        "name": "LunaFN",
+        "schemes": [
+          "LunaFN"
+        ]
+      }
     ]
   },
   "scripts": {
@@ -37,13 +45,17 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "axios": "^1.7.9",
-    "electron-updater": "^6.1.7"
+    "electron-store": "^10.0.0",
+    "electron-updater": "^6.1.7",
+    "ini": "^5.0.0",
+    "regedit": "^5.1.3"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@rushstack/eslint-patch": "^1.10.3",
+    "@types/ini": "^4.1.1",
     "@types/node": "^20.14.8",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",

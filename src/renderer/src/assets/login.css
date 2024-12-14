@@ -86,6 +86,10 @@ html {
   margin-top: auto;
 }
 
+.login-container button:hover {
+  background-color: #252525;
+}
+
 .login-container button svg {
   width: 24px;
   height: 24px;
