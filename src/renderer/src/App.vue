@@ -51,7 +51,7 @@ onMounted(() => {
       if (response.data) {
         window.electron.ipcRenderer.send('luna:auth-data', token, response.data)
         console.log('SIMGA NIGMA ' + window.data.getAuthData())
-        
+      
         // sessionStorage.setItem('authData', JSON.stringify(response.data));
       }
     } catch (error) {

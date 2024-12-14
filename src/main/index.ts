@@ -4,8 +4,9 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { update } from './updatecheck'
 import { AuthData } from '../types/AuthData'
-import { readTokenFromIni, saveTokenToIni } from './IniConfig'
-import axios from 'axios'
+import { saveTokenToIni } from './IniConfig'
+import { login } from './login'
+//import axios from 'axios'
 
 let mainWindow: BrowserWindow | null
 let authData: AuthData | null = null
@@ -53,39 +54,15 @@ function createWindow(): void {
     })
 
     ipcMain.handle('luna:login', async () => {
-      var TOKEN = readTokenFromIni()
-      console.log('TOKEN ' + TOKEN)
-      try {
-        const response = await axios.get('http://127.0.0.1:1111/launcher/api/v1/login', {
-          headers: {
-            Authorization: `${TOKEN}`
-          }
-        })
-
-        if (response.data) {
-          authData = response.data
-          if (authData) {
-            authData.AccessToken = TOKEN
-            console.log('SIMGA NIGMA ' + authData)
-            mainWindow!.webContents.send('IsLoggedIn', true);
-            //update-status
-            return authData
-          }
-          // sessionStorage.setItem('authData', JSON.stringify(response.data));
-        }
-      } catch (error) {
-        console.error('Error contacting backend:')
-      }
-
-      return null
+      return login(authData!, mainWindow!)
     })
 
     ipcMain.on('luna:auth-data', (_, token: string, data: AuthData) => {
       saveTokenToIni(token)
       authData = data
       if (authData) {
-        authData.AccessToken = token;
-        mainWindow!.webContents.send('IsLoggedIn', true);
+        authData.AccessToken = token
+        mainWindow!.webContents.send('IsLoggedIn', true)
       }
     })
 
