@@ -18,7 +18,7 @@
         <div class="profilePicture" :style="profileStyle"></div>
        
         <div class="profile-details">
-          <span class="username">vyntira</span> 
+          <span class="username">{{ getData.username }}</span> 
           <span class="role">Owner</span>
         </div>
       </div>
@@ -31,11 +31,21 @@
 <script>
 import imagePath from '../../assets/DefaultCharacter.png';
 export default {
+  props: {
+    LoginResponse: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   computed: {
     profileStyle() {
       return {
         backgroundImage: `url(${imagePath})`
       };
+    },
+    getData() {
+      console.log("NO " + JSON.stringify(this.LoginResponse))
+      return this.LoginResponse
     }
   }
 };

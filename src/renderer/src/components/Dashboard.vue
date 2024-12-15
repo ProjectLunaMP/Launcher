@@ -1,5 +1,5 @@
 <template>
-  <NavBarScreen />
+  <NavBarScreen :LoginResponse="getData" />
   I have these lucid dreams
 </template>
 
@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     getData() {
-      console.log(this.LoginResponse)
+      console.log("69 "+ JSON.stringify(this.LoginResponse))
       return this.LoginResponse
     }
   }
