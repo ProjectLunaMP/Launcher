@@ -1,27 +1,42 @@
-
-<template> 
-   <div class="sidebar">
-        <a class="title">LUNA</a>
-        <ul class="nav-links">
-            <li><a href="#" class="nav-active">Home</a></li>
-            <li><a href="#">Library</a></li>
-        </ul>
-        <div class="bottom">
-            <div class="info">
-                <a>Public Build Available</a>
-                <a>Season 2</a>
-                <a>1.11-CL-3807424</a>
-                <button>Download Now</button>
-            </div>
-            <div class="split"></div>
-            <div class="UserDetails">
-                <a>skulllll!!</a>
-            </div>
+<template>
+  <div class="sidebar">
+    <a class="title">LUNA</a>
+    <ul class="nav-links">
+      <li><a href="#" class="nav-active">Home</a></li>
+      <li><a href="#">Library</a></li>
+    </ul>
+    <div class="bottom">
+      <div class="info">
+        <div class="InfoBox"></div>
+        <a class="BuildTitle">Public Build Available!</a>
+        <a class="BuildS">Season 2</a>
+        <a class="BuildB">1.11-CL-3807424</a>
+        <a class="info-button">Download Now!</a>
+      </div>
+      <div class="split"></div>
+      <div class="UserDetails">
+        <div class="profilePicture" :style="profileStyle"></div>
+       
+        <div class="profile-details">
+          <span class="username">vyntira</span> 
+          <span class="role">Owner</span>
         </div>
-   </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style src="../../assets/SideBar.css"></style>
 
-
-<script></script>
+<script>
+import imagePath from '../../assets/DefaultCharacter.png';
+export default {
+  computed: {
+    profileStyle() {
+      return {
+        backgroundImage: `url(${imagePath})`
+      };
+    }
+  }
+};
+</script>
