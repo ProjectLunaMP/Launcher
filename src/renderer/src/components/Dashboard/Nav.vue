@@ -19,7 +19,7 @@
        
         <div class="profile-details">
           <span class="username">{{ getData.username }}</span> 
-          <span class="role">Owner</span>
+          <span class="role" :style="roleStyle">{{ getData.RoleName }}</span>
         </div>
       </div>
     </div>
@@ -46,6 +46,13 @@ export default {
     getData() {
       console.log("NO " + JSON.stringify(this.LoginResponse))
       return this.LoginResponse
+    },
+    roleStyle() {
+      switch (this.getData.RoleName) {
+
+        default:
+          return { color: 'lightgray' };
+      }
     }
   }
 };

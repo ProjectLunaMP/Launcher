@@ -4,5 +4,6 @@ export interface AuthData {
   email: string
   character: string
   DiscordId: string,
+  RoleName: string,
   AccessToken?: string
 }
