@@ -11,7 +11,7 @@ const status = ref<{
   status: string
 } | null>(null)
 
-const LoginData = ref<AuthData>();
+const LoginData = ref<AuthData>()
 const IsLoggedIn = ref<boolean | false>(false)
 //const isLoading = ref(true)
 window.electron.ipcRenderer.send('luna:update')
@@ -22,10 +22,9 @@ window.electron.ipcRenderer.send('luna:update')
 // REMOVE FOR PROD THIS IS TO SKIP STUFF
 onMounted(() => {
   var LoginResponse = window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
-    LoginData.value = LoginResponse;
+    LoginData.value = LoginResponse
   })
-  
-  console.log('LOGIN AUTO DATA ' + LoginResponse)
+
   // wow
   window.electron.ipcRenderer.on('update-status', (_, Newstatus) => {
     console.log(`old ${status} / new ${Newstatus.status} status`)
@@ -53,10 +52,10 @@ onMounted(() => {
 
       if (response.data) {
         window.electron.ipcRenderer.send('luna:auth-data', token, response.data)
-        console.log('SIMGA NIGMA ' + await window.data.getAuthData())
+        console.log('SIMGA NIGMA ' + (await window.data.getAuthData()))
 
         window.electron.ipcRenderer.invoke('luna:get-auth-data').then((LoginResponse) => {
-          LoginData.value = LoginResponse;
+          LoginData.value = LoginResponse
         })
 
         // sessionStorage.setItem('authData', JSON.stringify(response.data));

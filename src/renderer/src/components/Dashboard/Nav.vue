@@ -18,8 +18,8 @@
         <div class="profilePicture" :style="profileStyle"></div>
 
         <div class="profile-details">
-          <span class="username">{{ getData.username }}</span>
-          <span class="role" :style="roleStyle">{{ getData.RoleName }}</span>
+          <span class="username">{{ user.username }}</span>
+          <span class="role" :style="roleStyle">{{ user.RoleName }}</span>
         </div>
       </div>
     </div>
@@ -43,16 +43,12 @@ export default {
         backgroundImage: `url(${imagePath})`
       }
     },
-    getData() {
-      console.log('NO ' + JSON.stringify(this.LoginResponse))
-      return this.LoginResponse
+    roleStyle() { 
+      return { color: this.LoginResponse.RoleColor }
     },
-    roleStyle() {
-      const roleColors = {
-        'Server Booster': '#f47fff'
-      }
-
-      return { color: roleColors[this.getData.RoleName] || 'lightgray' };
+    user() {
+      //console.log("RIZZLER " + JSON.stringify(this.LoginResponse))
+      return this.LoginResponse
     }
   }
 }

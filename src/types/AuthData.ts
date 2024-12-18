@@ -5,5 +5,6 @@ export interface AuthData {
   character: string
   DiscordId: string,
   RoleName: string,
+  RoleColor: string,
   AccessToken?: string
 }

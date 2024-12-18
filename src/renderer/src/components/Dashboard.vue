@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     getData() {
-      console.log("69 "+ JSON.stringify(this.LoginResponse))
+      //console.log("69 "+ JSON.stringify(this.LoginResponse))
       return this.LoginResponse
     }
   }

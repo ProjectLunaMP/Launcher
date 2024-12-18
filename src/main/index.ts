@@ -5,7 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import { update } from './updatecheck'
 import { AuthData } from '../types/AuthData'
 import { saveTokenToIni } from './IniConfig'
-import { login } from './login'
+import user, { login } from './login'
 //import axios from 'axios'
 
 let mainWindow: BrowserWindow | null
@@ -49,25 +49,24 @@ function createWindow(): void {
     }
 
     ipcMain.on('luna:update', async () => {
-      console.log('TEST')
       update(mainWindow!)
     })
 
     ipcMain.handle('luna:login', () => {
       return login(authData!, mainWindow!)
-    })
+    }) 
 
     ipcMain.on('luna:auth-data', (_, token: string, data: AuthData) => {
       saveTokenToIni(token)
-      authData = data
       if (authData) {
-        authData.AccessToken = token
+        user.login(data, token);
+        //authData.AccessToken = token
         mainWindow!.webContents.send('IsLoggedIn', true)
       }
     })
 
     ipcMain.handle('luna:get-auth-data', () => {
-      return authData
+      return user.user
     })
     //ipcMain.on('luna:get-auth-data', async (_) => mainWindow!.webContents.send('AuthData', authData));
   }

@@ -23,7 +23,6 @@ declare global {
 
 const api = {}
 
-console.log("dsaadsasdasdasadsdasdas")
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
@@ -43,3 +42,6 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.api = api
 }
+
+
+console.log("Preload File Loaded")
