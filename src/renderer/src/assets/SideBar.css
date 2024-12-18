@@ -27,11 +27,23 @@ html {
   width: 100%;
 }
 
+.nav-links .icon {
+  width: 20px;
+  height: 20px;
+  color: #b3b3b3;
+  transition: color 0.3s;
+
+  padding-left: 10px;
+}
+
+.nav-links a:hover .icon {
+  color: white; 
+}
 .nav-links a {
-  display: inline-flex;
-  justify-content: center;
+  display: flex;  
+  justify-content: flex-start;
   align-items: center;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   color: #b3b3b3;
   font-size: 16px;
@@ -39,10 +51,22 @@ html {
   width: 220px;
   height: 40px;
   border-radius: 10px;
+  gap: 10px;
+  font-weight: lighter;
+}
+
+
+.nav-links a:hover,
+.nav-links a.nav-active {
+  color: white;
 }
 
 .nav-links a.nav-active {
   background: linear-gradient(to right, rgba(153, 153, 153, 0.1), rgba(255, 255, 255, 0.1));
+}
+
+.nav-links a.nav-active,
+.nav-links a .icon {
   color: white;
 }
 
