@@ -1,3 +1,3 @@
 <template>
-    cock!
+    do you?
 </template>

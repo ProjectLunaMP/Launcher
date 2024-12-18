@@ -3,7 +3,7 @@
     <a class="title">LUNA</a>
     <ul class="nav-links">
       <li>
-        <a href="#" class="nav-active">
+        <a @click="$emit('changeTab', 'home')" :class="{'nav-active': currentTab === 'home'}">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon"
@@ -19,7 +19,7 @@
         </a>
       </li>
       <li>
-        <a href="#">
+        <a @click="$emit('changeTab', 'library')" :class="{'nav-active': currentTab === 'library'}">
           <svg viewBox="0 0 22 22" class="icon" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M2.20089 7.71529L2.20081 16.2792C2.2008 17.3838 3.09623 18.2793 4.2008 18.2793L17.7996 18.2793C18.9042 18.2793 19.7996 17.3839 19.7997 16.2794L19.7999 7.42808C19.7999 6.87578 19.3522 6.42805 18.7999 6.42805H11.0767L8.54206 3.72055H3.20033C2.6479 3.72055 2.20012 4.16821 2.20029 4.72064C2.20056 5.59058 2.2009 6.84483 2.20089 7.71529Z"
@@ -97,6 +97,10 @@ export default {
     LoginResponse: {
       type: Object,
       default: () => ({})
+    },
+    currentTab: {
+      type: String,
+      required: true
     }
   },
   computed: {

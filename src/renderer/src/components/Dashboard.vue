@@ -1,22 +1,53 @@
 <template>
-  <NavBarScreen :LoginResponse="getData" />
-  <div style="margin-left: 258px; ">
-    I have these lucid dreams
+  <NavBarScreen @changeTab="setTab"   :currentTab="currentTab" :LoginResponse="getData" />
+  <div style="margin-left: 258px; overflow: hidden;   height: 100%;">
+    <transition :name="transitionName">
+      <div :key="currentTab"  class="tab-content">
+        <div  v-if="currentTab === 'home'" key="home" class="tab-content">
+          <HomeTab />
+        </div>
+        <div v-if="currentTab === 'library'" key="library" class="tab-content">
+          <LibraryTab />
+        </div>
+      </div>
+    </transition>
   </div>
- 
 </template>
 
 <script>
 import NavBarScreen from './Dashboard/Nav.vue'
+import HomeTab from './Dashboard/Tabs/HomeTab.vue'
+import LibraryTab from './Dashboard/Tabs/LibraryTab.vue'
 
 export default {
+  data() {
+    return {
+      currentTab: 'home',
+      transitionName: 'slide-left'
+    }
+  },
   components: {
-    NavBarScreen
+    NavBarScreen,
+    HomeTab,
+    LibraryTab
   },
   props: {
     LoginResponse: {
       type: Object,
       default: () => ({})
+    }
+  },
+  methods: {
+    setTab(tab) {
+      console.log(tab)
+      this.currentTab = null;
+       this.transitionName = ''
+      setTimeout(() => {
+          this.transitionName = 'slide-left'
+        this.currentTab = tab 
+        }, 100);
+        console.log(this.transitionName);
+     
     }
   },
   computed: {
@@ -27,3 +58,23 @@ export default {
   }
 }
 </script>
+
+<style>
+.tab-content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.slide-left-enter-active {
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+}
+.slide-left-enter-from {
+  transform: translateX(100%);
+}
+
+.slide-left-leave-active {
+  transition: none;
+  display: none;
+}
+
+</style>
