@@ -16,9 +16,9 @@
       <div class="split"></div>
       <div class="UserDetails">
         <div class="profilePicture" :style="profileStyle"></div>
-       
+
         <div class="profile-details">
-          <span class="username">{{ getData.username }}</span> 
+          <span class="username">{{ getData.username }}</span>
           <span class="role" :style="roleStyle">{{ getData.RoleName }}</span>
         </div>
       </div>
@@ -29,7 +29,7 @@
 <style src="../../assets/SideBar.css"></style>
 
 <script>
-import imagePath from '../../assets/DefaultCharacter.png';
+import imagePath from '../../assets/DefaultCharacter.png'
 export default {
   props: {
     LoginResponse: {
@@ -41,19 +41,19 @@ export default {
     profileStyle() {
       return {
         backgroundImage: `url(${imagePath})`
-      };
+      }
     },
     getData() {
-      console.log("NO " + JSON.stringify(this.LoginResponse))
+      console.log('NO ' + JSON.stringify(this.LoginResponse))
       return this.LoginResponse
     },
     roleStyle() {
-      switch (this.getData.RoleName) {
-
-        default:
-          return { color: 'lightgray' };
+      const roleColors = {
+        'Server Booster': '#f47fff'
       }
+
+      return { color: roleColors[this.getData.RoleName] || 'lightgray' };
     }
   }
-};
+}
 </script>
