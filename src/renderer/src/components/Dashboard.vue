@@ -1,6 +1,9 @@
 <template>
   <NavBarScreen :LoginResponse="getData" />
-  I have these lucid dreams
+  <div style="margin-left: 258px; ">
+    I have these lucid dreams
+  </div>
+ 
 </template>
 
 <script>
