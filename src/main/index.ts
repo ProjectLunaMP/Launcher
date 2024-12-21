@@ -1,15 +1,20 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join, resolve } from 'path'
+import path, { join, resolve } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { update } from './updatecheck'
 import { AuthData } from '../types/AuthData'
 import { saveTokenToIni } from './IniConfig'
 import user, { login } from './login'
+
+import { spawn, execSync } from 'child_process'
 //import axios from 'axios'
 
 let mainWindow: BrowserWindow | null
 let authData: AuthData | null = null
+
+import dllinjector from '../../resources/dllinjector.node';
+import { existsSync } from 'fs'
 
 function createWindow(): void {
   //registerProtocol()
@@ -54,12 +59,12 @@ function createWindow(): void {
 
     ipcMain.handle('luna:login', () => {
       return login(authData!, mainWindow!)
-    }) 
+    })
 
     ipcMain.on('luna:auth-data', (_, token: string, data: AuthData) => {
       saveTokenToIni(token)
       if (authData) {
-        user.login(data, token);
+        user.login(data, token)
         //authData.AccessToken = token
         mainWindow!.webContents.send('IsLoggedIn', true)
       }
@@ -67,6 +72,45 @@ function createWindow(): void {
 
     ipcMain.handle('luna:get-auth-data', () => {
       return user.user
+    })
+
+    ipcMain.on('luna:launchgame', (_, { gameExePath, dllPath }) => {
+      console.log(gameExePath)
+      console.log(dllPath)
+      const ShippingEAC = path.join(
+        gameExePath,
+        'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping_BE.exe'
+      )
+      if(existsSync(ShippingEAC)) {
+        const EACProcess = spawn(ShippingEAC);
+        console.log(EACProcess.pid);
+        dllinjector.freezeProcess(EACProcess.pid);
+      }
+
+      const ForniteLauncher = path.join(
+        gameExePath,
+        'FortniteGame\\Binaries\\Win64\\FortniteLauncher.exe'
+      )
+
+      if(existsSync(ForniteLauncher)) {
+        const ForniteLauncherProcess = spawn(ForniteLauncher);
+        dllinjector.freezeProcess(ForniteLauncherProcess.pid);
+      }
+   
+     
+      const gameExecutablePath = path.join(
+        gameExePath,
+        'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
+      )
+      execSync("set\x20OPENSSL_ia32cap=:~0x20000000");
+      const gameProcess = spawn(
+        gameExecutablePath,
+        ('-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=e8eb05fag41046i3hd23c89c -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
+          user.user?.AccessToken).split(' '),
+        { env: { OPENSSL_ia32cap: ':~0x20000000' } }
+      )
+      dllinjector.injectDll(gameProcess.pid, dllPath);
+      console.log('PORN!')
     })
     //ipcMain.on('luna:get-auth-data', async (_) => mainWindow!.webContents.send('AuthData', authData));
   }

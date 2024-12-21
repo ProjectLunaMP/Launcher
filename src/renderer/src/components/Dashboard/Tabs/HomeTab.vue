@@ -1,31 +1,55 @@
 <template>
   <div class="outer-class">
-    <div class="PlayerClass">
-      <div class="inner-div">
-        <div class="pl-icon" :style="profileStyle"><!--ICON--></div>
-        <div class="text-container">
-          <span class="greeting">Hi, player!</span>
-          <span class="description">Relive OG Fortnite <b>Season 2</b> with <b>Luna!</b></span>
+    <div class="leftPart">
+      <div class="PlayerClass">
+        <div class="inner-div">
+          <div class="pl-icon" :style="profileStyle"><!--ICON--></div>
+          <div class="text-container">
+            <span class="greeting">Hi, player!</span>
+            <span class="description">Relive OG Fortnite <b>Season 2</b> with <b>Luna!</b></span>
+          </div>
         </div>
       </div>
+      <div class="UserData">
+        <div class="UserSection">
+          <div class="BTClass">
+            <span class="UserBTValue">21</span>
+            <span class="UserBTDec">Battle Pass Tier</span>
+          </div>
+
+          <div class="UserImage" :style="BpTier"><!--ICON--></div>
+        </div>
+        <div class="UserSection">
+          <div class="BTClass">
+            <span class="UserBTValue">21</span>
+            <span class="UserBTDec">Season Level</span>
+          </div>
+
+          <div class="UserImage" :style="BpLevel"><!--ICON--></div>
+        </div>
+      </div>
+
+      <div class="SeasonNews"></div>
     </div>
-    <div class="UserData">
-      <div class="UserSection">
-         <div class="BTClass">
-          <span class="UserBTValue">21</span>
-          <span class="UserBTDec">Battle Pass Tier</span>
-         </div>
 
-         <div class="UserImage" :style="BpTier" ><!--ICON--></div>
-      </div>
-      <div class="UserSection">
-         <div class="BTClass">
-          <span class="UserBTValue">21</span>
-          <span class="UserBTDec">Season Level</span>
-         </div>
+    <div class="rightDivvv"></div>
+  </div>
 
-         <div class="UserImage" :style="BpLevel" ><!--ICON--></div>
-      </div>
+  <div class="AllNews">
+    <h2>News & Updates</h2>
+
+    <div class="AllNewsGrid">
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem"></div>
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <NavBarScreen @changeTab="setTab"   :currentTab="currentTab" :LoginResponse="getData" />
-  <div style="margin-left: 258px; overflow: hidden;   height: 100%;">
+  <div style="margin-left: 258px; overflow: hidden;  ">
     <transition :name="transitionName">
       <div :key="currentTab"  class="tab-content">
         <div  v-if="currentTab === 'home'" key="home" class="tab-content">
@@ -61,7 +61,6 @@ export default {
 
 <style>
 .tab-content {
-  display: flex;
   width: 100%;
   height: 100%;
 }
