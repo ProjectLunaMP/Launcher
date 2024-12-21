@@ -29,7 +29,35 @@
         </div>
       </div>
 
-      <div class="SeasonNews"></div>
+      <div class="SeasonNews">
+        <div class="content">
+          <div class="OuterSeasonNewsLaunchClock">
+            <div class="SeasonNewsLaunchClock">
+              <div><!--ICON--></div>
+              <a>3:01</a>
+            </div>
+          </div>
+
+          <div class="SeasonNewsInfo">
+            <span class="SeasonNewsInfoName">Luna</span>
+            <span class="SeasonNewsInfoSeason">Season 2</span>
+            <span class="SeasonNewsInfoDec">
+              <span class="highlight">Season 2, with the slogan</span>
+              Fort Knights,  <span class="highlight">was the second season of </span>Fortnite: Battle
+              Royale.
+            </span>
+          </div>
+
+          <div class="SeasonNewsLaunchContent">
+            <span class="GameName">Fortnite</span>
+            <span class="GameVersion">1.11.0-CL-3807424</span>
+
+            <a> Install </a>
+          </div>
+        </div>
+
+        <div class="imgstuff" :style="SeasonNewsIM"></div>
+      </div>
     </div>
 
     <div class="rightDivvv"></div>
@@ -58,6 +86,7 @@
 import imagePath from '../../../assets/tempplayer.png'
 import BPTierPath from '../../../assets/BPTier.png'
 import BPLevelPath from '../../../assets/BPLevel.png'
+import SeasonTempPath from '../../../assets/SeasonTemp.png'
 export default {
   computed: {
     profileStyle() {
@@ -73,6 +102,11 @@ export default {
     BpLevel() {
       return {
         backgroundImage: `url(${BPLevelPath})`
+      }
+    },
+    SeasonNewsIM() {
+      return {
+        backgroundImage: `url(${SeasonTempPath})`
       }
     }
   }

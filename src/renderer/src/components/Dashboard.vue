@@ -65,7 +65,7 @@ export default {
   height: 100%;
 }
 .slide-left-enter-active {
-  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
 }
 .slide-left-enter-from {
   transform: translateX(100%);

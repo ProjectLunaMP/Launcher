@@ -12,7 +12,7 @@ html {
   display: flex;
   gap: 20px;
   width: 100%;
-  height: auto; 
+  height: auto;
   box-sizing: border-box;
 }
 
@@ -69,7 +69,7 @@ html {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: auto; 
+  height: auto;
 }
 
 .UserData {
@@ -132,6 +132,120 @@ html {
   height: 236px;
   background-color: #1c1c1c;
   border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.imgstuff {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+  filter: blur(2px);
+}
+
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.SeasonNewsLaunchContent {
+  width: 95%;
+  height: 45px;
+  background-color: #6969697c;
+  border-radius: 5px;
+
+  margin-top: auto;
+  margin-bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SeasonNewsLaunchClock {
+  margin-top: 15px;
+  margin-left: 15px;
+  width: 70px;
+  height: 25px;
+  background-color: #00000077;
+  border-radius: 5px;
+}
+
+.OuterSeasonNewsLaunchClock {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.SeasonNewsInfo {
+  margin-top: 15px;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+}
+
+.SeasonNewsInfoName {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.SeasonNewsInfoSeason {
+  font-size: 24px;
+  font-weight: bold;
+  color: #a22d3e;
+}
+
+.SeasonNewsInfoDec {
+  width: 80%;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.highlight {
+  color: #a22d3e;
+}
+
+.SeasonNewsLaunchContentInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.GameName {
+  margin-left: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.GameVersion {
+  margin-left: 5px;
+  font-size: 12px;
+  color: #cecece;
+}
+
+.SeasonNewsLaunchContent a {
+  width: 115px;
+  height: 30px;
+  background: linear-gradient(0deg, #d9d9d9 0%, #b7b7b7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: 15px;
 }
 
 .AllNews {
@@ -140,17 +254,14 @@ html {
   box-sizing: border-box;
 }
 
-
 .AllNewsGrid {
-    display: grid;
-    gap: 15px;
-    grid-auto-flow:row;
-    grid-template-columns: repeat(auto-fill, 300px);
-    width: 100%;
-    box-sizing: border-box;
-
+  display: grid;
+  gap: 15px;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fill, 300px);
+  width: 100%;
+  box-sizing: border-box;
 }
-
 
 .AllNewsGridItem {
   width: 300px;
