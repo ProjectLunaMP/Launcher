@@ -10,12 +10,11 @@ class UserService {
     this.user = null;
   }
 
-  login(authData: AuthData, TOKEN: string) {
+  async login(authData: AuthData, TOKEN: string) {
     this.user = authData;
     this.user.AccessToken = TOKEN;
-
     this.user.RoleColor = this.DoTheRolesBud(authData.RoleName);
-
+    this.user.character = await this.DoMyCharacterBud(authData.character);
   }
 
   DoTheRolesBud(ROLE: string): string{
@@ -30,6 +29,23 @@ class UserService {
     }
 
     return roleColors[ROLE as keyof typeof roleColors] ?? 'lightgray';
+  }
+
+  async DoMyCharacterBud(Character: string): Promise<string> {
+    try{
+
+      return `https://fortnite-api.com/images/cosmetics/br/${Character}/icon.png`
+      /*const response = await fetch(`https://fortnite-api.com/v2/cosmetics/br/${Character}`); 
+      const data = await response.json();
+
+      if(data){
+        return data.data.images.icon
+      }*/
+    }catch(err){
+
+    }
+
+    return "https://fortnite-api.com/images/cosmetics/br/cid_001_athena_commando_f_default/icon.png"
   }
 }
 
@@ -47,7 +63,7 @@ export async function login(authData: AuthData, mainWindow: BrowserWindow): Prom
     })
 
     if (response.data) {
-      user.login(response.data, TOKEN);
+      await user.login(response.data, TOKEN);
       mainWindow!.webContents.send('IsLoggedIn', true)
       //update-status
       return user.user;

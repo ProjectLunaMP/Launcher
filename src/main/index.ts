@@ -61,10 +61,10 @@ function createWindow(): void {
       return login(authData!, mainWindow!)
     })
 
-    ipcMain.on('luna:auth-data', (_, token: string, data: AuthData) => {
+    ipcMain.on('luna:auth-data', async (_, token: string, data: AuthData) => {
       saveTokenToIni(token)
       if (authData) {
-        user.login(data, token)
+        await user.login(data, token)
         //authData.AccessToken = token
         mainWindow!.webContents.send('IsLoggedIn', true)
       }

@@ -43,7 +43,7 @@
             <span class="SeasonNewsInfoSeason">Season 2</span>
             <span class="SeasonNewsInfoDec">
               <span class="highlight">Season 2, with the slogan</span>
-              Fort Knights,  <span class="highlight">was the second season of </span>Fortnite: Battle
+              Fort Knights, <span class="highlight">was the second season of </span>Fortnite: Battle
               Royale.
             </span>
           </div>
@@ -93,12 +93,17 @@ export default {
     LoginResponse: {
       type: Object,
       default: () => ({})
-    },
+    }
   },
   computed: {
+    getData() {
+      console.log('HOME ' + JSON.stringify(this.LoginResponse))
+
+      return this.LoginResponse
+    },
     profileStyle() {
       return {
-        backgroundImage: `url(${imagePath})`
+        backgroundImage: `url(${this.getData.character})`
       }
     },
     BpTier() {
@@ -115,10 +120,6 @@ export default {
       return {
         backgroundImage: `url(${SeasonTempPath})`
       }
-    },
-    getData() {
-      console.log("HOME "+ JSON.stringify(this.LoginResponse))
-      return this.LoginResponse
     }
   }
 }

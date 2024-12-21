@@ -63,6 +63,7 @@ html {
   background-position: center;
   bottom: 0px;
   position: absolute;
+  transform: scaleX(-1);
 }
 
 .leftPart {
