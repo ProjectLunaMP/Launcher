@@ -5,7 +5,7 @@
         <div class="inner-div">
           <div class="pl-icon" :style="profileStyle"><!--ICON--></div>
           <div class="text-container">
-            <span class="greeting">Hi, player!</span>
+            <span class="greeting">Hi, {{ getData.username }}!</span>
             <span class="description">Relive OG Fortnite <b>Season 2</b> with <b>Luna!</b></span>
           </div>
         </div>
@@ -87,7 +87,14 @@ import imagePath from '../../../assets/tempplayer.png'
 import BPTierPath from '../../../assets/BPTier.png'
 import BPLevelPath from '../../../assets/BPLevel.png'
 import SeasonTempPath from '../../../assets/SeasonTemp.png'
+
 export default {
+  props: {
+    LoginResponse: {
+      type: Object,
+      default: () => ({})
+    },
+  },
   computed: {
     profileStyle() {
       return {
@@ -108,6 +115,10 @@ export default {
       return {
         backgroundImage: `url(${SeasonTempPath})`
       }
+    },
+    getData() {
+      console.log("HOME "+ JSON.stringify(this.LoginResponse))
+      return this.LoginResponse
     }
   }
 }

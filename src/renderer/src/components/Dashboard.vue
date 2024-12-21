@@ -1,10 +1,10 @@
 <template>
-  <NavBarScreen @changeTab="setTab"   :currentTab="currentTab" :LoginResponse="getData" />
+  <NavBarScreen @changeTab="setTab" :currentTab="currentTab" :LoginResponse="getData" />
   <div style="margin-left: 258px; overflow: hidden;  ">
     <transition :name="transitionName">
       <div :key="currentTab"  class="tab-content">
         <div  v-if="currentTab === 'home'" key="home" class="tab-content">
-          <HomeTab />
+          <HomeTab :LoginResponse="getData" />
         </div>
         <div v-if="currentTab === 'library'" key="library" class="tab-content">
           <LibraryTab />
