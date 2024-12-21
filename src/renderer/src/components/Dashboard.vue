@@ -1,9 +1,9 @@
 <template>
   <NavBarScreen @changeTab="setTab" :currentTab="currentTab" :LoginResponse="getData" />
-  <div style="margin-left: 258px; overflow: hidden;  ">
+  <div style="margin-left: 258px; overflow: hidden">
     <transition :name="transitionName">
-      <div :key="currentTab"  class="tab-content">
-        <div  v-if="currentTab === 'home'" key="home" class="tab-content">
+      <div :key="currentTab" class="tab-content">
+        <div v-if="currentTab === 'home'" key="home" class="tab-content">
           <HomeTab :LoginResponse="getData" />
         </div>
         <div v-if="currentTab === 'library'" key="library" class="tab-content">
@@ -40,14 +40,15 @@ export default {
   methods: {
     setTab(tab) {
       console.log(tab)
-      this.currentTab = null;
-       this.transitionName = ''
-      setTimeout(() => {
+      if (tab != this.currentTab) {
+        this.currentTab = null
+        this.transitionName = ''
+        setTimeout(() => {
           this.transitionName = 'slide-left'
-        this.currentTab = tab 
-        }, 100);
-        console.log(this.transitionName);
-     
+          this.currentTab = tab
+        }, 100)
+        console.log(this.transitionName)
+      }
     }
   },
   computed: {
@@ -65,7 +66,7 @@ export default {
   height: 100%;
 }
 .slide-left-enter-active {
-  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 .slide-left-enter-from {
   transform: translateX(100%);
@@ -75,5 +76,4 @@ export default {
   transition: none;
   display: none;
 }
-
 </style>
