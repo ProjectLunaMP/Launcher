@@ -102,7 +102,7 @@ function createWindow(): void {
         gameExePath,
         'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
       )
-      execSync("set\x20OPENSSL_ia32cap=:~0x20000000");
+      execSync("set OPENSSL_ia32cap=:~0x20000000");
       const gameProcess = spawn(
         gameExecutablePath,
         ('-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=e8eb05fag41046i3hd23c89c -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
