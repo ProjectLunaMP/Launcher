@@ -14,16 +14,20 @@ const status = ref<{
 const LoginData = ref<AuthData>()
 const IsLoggedIn = ref<boolean | false>(false)
 //const isLoading = ref(true)
-window.electron.ipcRenderer.send('luna:update')
+window.electron.ipcRenderer.invoke('luna:update').then(async (e) => {
+  if(!e) return;
+  var LoginResponse = await window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
+    LoginData.value = LoginResponse
+  })
+})
+
 
 // WIP (seeing what i can do)
 //const ipcHandle = () => window.electron.ipcRenderer.send('ping') //  <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
 
 // REMOVE FOR PROD THIS IS TO SKIP STUFF
 onMounted(() => {
-  var LoginResponse = window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
-    LoginData.value = LoginResponse
-  })
+ 
 
   // wow
   window.electron.ipcRenderer.on('update-status', (_, Newstatus) => {

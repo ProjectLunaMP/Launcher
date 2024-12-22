@@ -9,17 +9,20 @@ const getAppVersion = (): string => {
   return packageJson.version
 }
 
-export async function update(mainWindow: BrowserWindow): Promise<void> {
+export async function update(mainWindow: BrowserWindow): Promise<boolean> {
   console.log('UPDATE ' + getAppVersion())
-
+  let DONTNeedUpdate = false;
   try{
-    axios.get("http://127.0.0.1:1111/launcher/api/v1/version").then(response => {
+    
+    await axios.get("http://127.0.0.1:1111/launcher/api/v1/version").then(response => {
       if(response.data){
         console.log(response.data);
         if(response.data.LauncherVersion === getAppVersion()) {
           console.log("TEST!!");
           // not sure
           mainWindow.webContents.send('update-status', { status: 'online' });
+
+          DONTNeedUpdate = true;
         }else {
           mainWindow.webContents.send('update-status', { status: 'update-available' });
         }
@@ -32,4 +35,6 @@ export async function update(mainWindow: BrowserWindow): Promise<void> {
   }catch (err) {
     console.error("WEIRD " + err);
   }
+
+  return DONTNeedUpdate;
 }

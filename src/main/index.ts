@@ -15,6 +15,7 @@ let authData: AuthData | null = null
 
 import dllinjector from '../../resources/dllinjector.node';
 import { existsSync } from 'fs'
+import { GrabNews } from './GrabNews'
 
 function createWindow(): void {
   //registerProtocol()
@@ -53,8 +54,17 @@ function createWindow(): void {
       mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
 
-    ipcMain.on('luna:update', async () => {
-      update(mainWindow!)
+    ipcMain.handle('luna:update', async () => {
+      console.log(await update(mainWindow!));
+      if(!await update(mainWindow!)) {
+        return null;
+      }
+
+      await GrabNews(mainWindow!); // if news fail will just default to default news!
+
+      // Load Other stuff??? news
+
+      return "e";
     })
 
     ipcMain.handle('luna:login', () => {
@@ -72,6 +82,10 @@ function createWindow(): void {
 
     ipcMain.handle('luna:get-auth-data', () => {
       return user.user
+    })
+
+    ipcMain.handle('luna:get-news-data', () => {
+      return user.news
     })
 
     ipcMain.on('luna:launchgame', (_, { gameExePath, dllPath }) => {

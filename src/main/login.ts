@@ -5,9 +5,11 @@ import axios from 'axios'
 
 class UserService {
   user: AuthData | null;
+  news: LauncherNews | null;
 
   constructor() {
     this.user = null;
+    this.news = null;
   }
 
   async login(authData: AuthData, TOKEN: string) {
@@ -15,6 +17,10 @@ class UserService {
     this.user.AccessToken = TOKEN;
     this.user.RoleColor = this.DoTheRolesBud(authData.RoleName);
     this.user.character = await this.DoMyCharacterBud(authData.character);
+  }
+
+  async SetupNews(newsData: LauncherNews) {
+    this.news = newsData
   }
 
   DoTheRolesBud(ROLE: string): string{
