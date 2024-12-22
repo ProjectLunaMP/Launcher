@@ -1,0 +1,50 @@
+body,
+html {
+  height: 100vh;
+  width: 100%;
+
+  margin: 0;
+}
+
+.outer-class {
+  margin-top: 25px;
+  margin-left: 30px;
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.inner-class {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px
+}
+
+.BackButton {
+    background-color: #1c1c1c;
+    width: 70px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.NewsImage {
+    width: 95%;
+    height: 200px;
+    background: url('https://cdn.discordapp.com/attachments/1319073287934050327/1319431163198177344/image.png?ex=67693b47&is=6767e9c7&hm=beaad3950ff06626861bc912bd4d0436b819ec95cc153be94572cc4f0ab6683e&')
+    center center / cover no-repeat;
+    border-radius: 10px;
+
+}
+
+.NewsContent{
+    margin-top: 25px;
+    margin-left: 20px;
+    width: 90%;
+}

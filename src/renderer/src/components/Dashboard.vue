@@ -1,13 +1,17 @@
 <template>
-  <NavBarScreen @changeTab="setTab" :currentTab="currentTab" :LoginResponse="getData" />
+  <NavBarScreen @changeTab="setTab" :currentTab="TabName" :LoginResponse="getData" />
   <div style="margin-left: 258px; overflow: hidden">
     <transition :name="transitionName">
       <div :key="currentTab" class="tab-content">
         <div v-if="currentTab === 'home'" key="home" class="tab-content">
-          <HomeTab :LoginResponse="getData" />
+          <HomeTab @newsItem="newsItem" :LoginResponse="getData" />
         </div>
         <div v-if="currentTab === 'library'" key="library" class="tab-content">
           <LibraryTab />
+        </div>
+
+        <div v-if="currentTab === 'newspopout'" key="newspopout" class="tab-content">
+          <NewsPage @back="TabBack" />
         </div>
       </div>
     </transition>
@@ -18,18 +22,21 @@
 import NavBarScreen from './Dashboard/Nav.vue'
 import HomeTab from './Dashboard/Tabs/HomeTab.vue'
 import LibraryTab from './Dashboard/Tabs/LibraryTab.vue'
+import NewsPage from './Dashboard/Tabs/NewsPage.vue'
 
 export default {
   data() {
     return {
       currentTab: 'home',
+      TabName: 'home',
       transitionName: 'slide-left'
     }
   },
   components: {
     NavBarScreen,
     HomeTab,
-    LibraryTab
+    LibraryTab,
+    NewsPage
   },
   props: {
     LoginResponse: {
@@ -40,15 +47,36 @@ export default {
   methods: {
     setTab(tab) {
       console.log(tab)
-      if (tab != this.currentTab) {
+      if (tab != this.TabName) {
         this.currentTab = null
+        this.TabName = null
         this.transitionName = ''
         setTimeout(() => {
           this.transitionName = 'slide-left'
+          this.TabName = tab
           this.currentTab = tab
         }, 100)
-        console.log(this.transitionName)
       }
+    },
+    newsItem(tab) {
+      console.log(tab)
+      this.currentTab = null // this clears the background only
+      this.transitionName = ''
+      setTimeout(() => {
+        this.transitionName = 'slide-left'
+        this.currentTab = 'newspopout' // ig
+      }, 100)
+    },
+    TabBack(tab) {
+      console.log("TEST + " + tab)
+      // just no check (buggy without proper use)
+      this.currentTab = null
+      this.transitionName = ''
+      setTimeout(() => {
+        this.transitionName = 'slide-left'
+        this.TabName = tab
+        this.currentTab = tab
+      }, 100)
     }
   },
   computed: {

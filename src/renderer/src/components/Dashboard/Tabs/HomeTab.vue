@@ -67,7 +67,7 @@
     <h2>News & Updates</h2>
 
     <div class="AllNewsGrid">
-      <div class="AllNewsGridItem">
+      <div @click="$emit('newsItem', 1)" class="AllNewsGridItem">
         <span class="badge">NEW!</span>
         <div class="NewsGridContent">
           <h3>NEWS!!!</h3>
