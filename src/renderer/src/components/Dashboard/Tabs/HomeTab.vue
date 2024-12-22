@@ -67,17 +67,86 @@
     <h2>News & Updates</h2>
 
     <div class="AllNewsGrid">
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
-      <div class="AllNewsGridItem"></div>
+      <div class="AllNewsGridItem">
+        <span class="badge">NEW!</span>
+        <div class="NewsGridContent">
+          <h3>NEWS!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <span class="badge">NEW!</span>
+        <div class="NewsGridContent">
+          <h3>sigma!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>black!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>sigma!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>black!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>sigma!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>black!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>sigma!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>black!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>sigma!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>black!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>sigma!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
+      <div class="AllNewsGridItem">
+        <div class="NewsGridContent">
+          <h3>black!!!</h3>
+          <p>12/24/2024</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>

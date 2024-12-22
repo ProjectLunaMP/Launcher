@@ -149,7 +149,6 @@ html {
   filter: blur(2px);
 }
 
-
 .content {
   position: relative;
   z-index: 1;
@@ -265,8 +264,71 @@ html {
 }
 
 .AllNewsGridItem {
+  position: relative;
   width: 300px;
   height: 185px;
   background-color: #1c1c1c;
   border-radius: 5px;
+  background: url('https://cdn.discordapp.com/attachments/1319073287934050327/1319431163198177344/image.png?ex=67693b47&is=6767e9c7&hm=beaad3950ff06626861bc912bd4d0436b819ec95cc153be94572cc4f0ab6683e&')
+    center center / cover no-repeat;
+}
+
+.AllNewsGridItem::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+}
+
+.AllNewsGridItem:hover::after {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.NewsGridContent {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.AllNewsGridItem:hover .NewsGridContent {
+  opacity: 1;
+}
+
+.badge {
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  width: 50px;
+  height: 15px;
+  left: 8px;
+  top: 6px;
+  background: linear-gradient(270deg, #5bb0ff 0%, #77e6ff 100%);
+  border-radius: 5px;
+  text-align: center;
+  z-index: 1;
+}
+
+.NewsGridContent h3 {
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.NewsGridContent p {
+  font-size: 16px;
+  color: #C6C6C6;
+  margin-top: 0;
 }
