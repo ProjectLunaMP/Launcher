@@ -11,7 +11,7 @@
         </div>
 
         <div v-if="currentTab === 'newspopout'" key="newspopout" class="tab-content">
-          <NewsPage @back="TabBack" />
+          <NewsPage @back="TabBack" :newsData="newsData" />
         </div>
       </div>
     </transition>
@@ -29,7 +29,8 @@ export default {
     return {
       currentTab: 'home',
       TabName: 'home',
-      transitionName: 'slide-left'
+      transitionName: 'slide-left',
+      newsData: null
     }
   },
   components: {
@@ -58,10 +59,13 @@ export default {
         }, 100)
       }
     },
-    newsItem(tab) {
+    async newsItem(tab) {
       console.log(tab)
       this.currentTab = null // this clears the background only
       this.transitionName = ''
+      const fetchedNews = await window.electron.ipcRenderer.invoke('luna:get-news-data')
+      this.newsData = fetchedNews.PatchNotes[tab];
+      
       setTimeout(() => {
         this.transitionName = 'slide-left'
         this.currentTab = 'newspopout' // ig

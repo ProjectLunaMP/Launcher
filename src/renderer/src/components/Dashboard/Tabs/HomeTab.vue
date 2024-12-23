@@ -67,84 +67,13 @@
     <h2>News & Updates</h2>
 
     <div class="AllNewsGrid">
-      <div @click="$emit('newsItem', 1)" class="AllNewsGridItem">
-        <span class="badge">NEW!</span>
-        <div class="NewsGridContent">
-          <h3>NEWS!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <span class="badge">NEW!</span>
-        <div class="NewsGridContent">
-          <h3>sigma!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>black!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>sigma!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>black!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>sigma!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>black!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>sigma!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>black!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>sigma!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>black!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>sigma!!!</h3>
-          <p>12/24/2024</p>
-        </div>
-      </div>
-      <div class="AllNewsGridItem">
-        <div class="NewsGridContent">
-          <h3>black!!!</h3>
-          <p>12/24/2024</p>
+      <div v-for="(note, index) in newsData.PatchNotes" :key="index" class="news-item">
+        <div @click="$emit('newsItem', index)" class="AllNewsGridItem">
+          <span class="badge">NEW!</span>
+          <div class="NewsGridContent">
+            <h3>{{ note.Title }}</h3>
+            <p>{{ note.DateUploaded }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -162,6 +91,11 @@ export default {
     LoginResponse: {
       type: Object,
       default: () => ({})
+    }
+  },
+  data() {
+    return {
+      newsData: { PatchNotes: [] }
     }
   },
   computed: {
@@ -188,6 +122,20 @@ export default {
     SeasonNewsIM() {
       return {
         backgroundImage: `url(${SeasonTempPath})`
+      }
+    }
+  },
+  mounted() {
+    this.fetchNewsData()
+  },
+  methods: {
+    async fetchNewsData() {
+      try {
+        const fetchedNews = await window.electron.ipcRenderer.invoke('luna:get-news-data')
+        this.newsData = fetchedNews
+        console.log('Fetched News:', this.newsData)
+      } catch (error) {
+        console.error('Error fetching news data:', error)
       }
     }
   }

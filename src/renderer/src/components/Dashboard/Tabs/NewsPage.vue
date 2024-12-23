@@ -5,12 +5,19 @@
 
       <div class="NewsImage"></div>
 
-      <div class="NewsContent">
-        <!--News Stuff forced in this div!-->
-        <strong>News Failed To Load</strong>
-    </div>
+      <div class="NewsContent" v-html="newsData.NewsContent"></div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    newsData: {
+      required: true
+    }
+  }
+}
+</script>
 
 <style src="../../../assets/NewsPage.css"></style>
