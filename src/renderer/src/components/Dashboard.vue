@@ -20,7 +20,7 @@
   <div @click="OpenLibraryPath(false)" class="popup-overlay" v-if="LibraryshowPopup"  key="LibraryshowPopup">
     <div @click.stop class="popup-content">
       <span class="PopupTitle">Import Installation</span>
-      <span class="PopupDec">To get started, import your Fortnite installation folder that contains the "FortniteGame" and "Engine" directories.</span>
+      <span class="PopupDec">To get started, import your Fortnite installation folder that contains the "<strong>FortniteGame</strong>" and "<strong>Engine</strong>" directories.</span>
       <div class="InputContr">
         <input>
         <div class="next-to-input"><!--next to input! --></div>
