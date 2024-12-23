@@ -1,7 +1,12 @@
 <template>
-  <div class="outer-class">
+  <div class="outer-class" >
     <div class="LIBItemsGrid">
-      <div v-for="(note, index) in builds" class="LibItem">
+      <div
+        v-for="(note, index) in builds"
+        class="LibItem"
+        
+        :style="getBackgroundStyle(note.buildPath)" 
+      >
         <div @click="launchGame(note.buildPath)" class="LibItemOuter">
           <div class="LibItemBottom">
             <span class="GameNameF"> Fortnite </span>
@@ -31,31 +36,41 @@ export default {
     return {
       builds: [],
       versionCache: {},
-      dataLoaded: false 
+      dataLoaded: false
     }
   },
   methods: {
     async loadBuilds(shouldturnfalse) {
-      if(shouldturnfalse) this.dataLoaded = false;
+      if (shouldturnfalse) this.dataLoaded = false
       console.log(this.dataLoaded)
-      if(this.dataLoaded) return;
+      if (this.dataLoaded) return
       try {
-   
         const response = await window.electron.ipcRenderer.invoke('luna:get-builds')
         this.builds = response
         console.log('NIG' + this.builds)
 
         for (const note of this.builds) {
           if (note.VersionID && !this.versionCache[note.VersionID]) {
-            this.versionCache[note.VersionID] = await window.electron.ipcRenderer.invoke('luna:getBuildVersion', note.VersionID)
+            this.versionCache[note.VersionID] = await window.electron.ipcRenderer.invoke(
+              'luna:getBuildVersion',
+              note.VersionID
+            )
           }
         }
-        this.dataLoaded = true;
+        this.dataLoaded = true
       } catch (error) {
         console.error('Failed to load builds:', error)
       }
     },
 
+    getBackgroundStyle(buildPath) {
+      // you cant load local files :((
+      //const path = `file:///${buildPath.replace(/\\/g, '/')}/FortniteGame/Content/Splash/Splash.bmp`;
+     // console.log(path);  
+      return {
+        background: `url(http://127.0.0.1:3000/files/Splash.bmp) center center / cover no-repeat`,
+      };
+    },
 
     async launchGame(gameExePath) {
       try {
@@ -64,7 +79,7 @@ export default {
       } catch (error) {
         alert('Error launching game')
       }
-    },
+    }
   },
   mounted() {
     this.loadBuilds()

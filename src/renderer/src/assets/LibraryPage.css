@@ -28,8 +28,6 @@ html {
   width: 181px;
   height: 280px;
   border-radius: 10px;
-  background: url('https://cdn.discordapp.com/attachments/1319073287934050327/1319431163198177344/image.png?ex=67693b47&is=6767e9c7&hm=beaad3950ff06626861bc912bd4d0436b819ec95cc153be94572cc4f0ab6683e&')
-  center center / cover no-repeat;
 }
 
 .LibItemForced {
