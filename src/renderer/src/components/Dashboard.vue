@@ -169,21 +169,31 @@ export default {
 
 input {
   margin-right: 10px;
-  width: 100%;
-  max-width: 180px;
+  width: 360px;
   height: 40px;
-  border: 2px solid #353535;
-
+  border: 3px solid #353535 !important;
+  background-color: transparent;
+  color: white;
   border-radius: 5px;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+font-weight: 500;
+font-size: 16px;
+}/* C:\OG\1.11.0 */
 
+
+input:focus {
+  border-color: none;
 }
 
 .next-to-input {
   font-size: 12px;
   color: #555;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   background-color: #353535;
+  border-radius: 5px;
 }
 
 </style>
