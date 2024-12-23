@@ -151,15 +151,16 @@ export default {
 }
 
 .PopupTitle {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px; 
 }
 
 .PopupDec {
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   margin-bottom: 20px; 
+  width: 90%;
 }
 
 .InputContr {
