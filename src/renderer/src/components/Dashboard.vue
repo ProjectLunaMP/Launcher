@@ -155,6 +155,7 @@ export default {
     OpenLibraryPath(Should = true) {
       console.log(Should)
       this.LibraryshowPopup = Should
+      this.messageMessage = "";
     }
   },
   computed: {
