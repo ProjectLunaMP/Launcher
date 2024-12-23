@@ -2,7 +2,7 @@
   <div class="outer-class">
     <div class="LIBItemsGrid">
       <div v-for="(note, index) in builds" class="LibItem">
-        <div class="LibItemOuter">
+        <div @click="launchGame(note.buildPath)" class="LibItemOuter">
           <div class="LibItemBottom">
             <span class="GameNameF"> Fortnite </span>
             <span class="GameVersion"> {{ versionCache[note.VersionID] || 'Loading...' }} </span>
@@ -56,12 +56,11 @@ export default {
       }
     },
 
-    // need to remove this (kinda forced)
-    async launchGame() {
+
+    async launchGame(gameExePath) {
       try {
-        const gameExePath = 'G:\\fortnite builds\\27548a59-417a-4b57-aeb9-9fe615855c31'
-        const dllPath = 'C:\\Users\\Zephironyx\\AppData\\Roaming\\FortLauncher\\FortCurl.dll'
-        window.electron.ipcRenderer.send('luna:launchgame', { gameExePath, dllPath })
+        //const gameExePath = 'G:\\fortnite builds\\27548a59-417a-4b57-aeb9-9fe615855c31'
+        window.electron.ipcRenderer.send('luna:launchgame', { gameExePath })
       } catch (error) {
         alert('Error launching game')
       }

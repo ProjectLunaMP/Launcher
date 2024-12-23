@@ -91,9 +91,10 @@ function createWindow(): void {
       return user.news
     })
 
-    ipcMain.on('luna:launchgame', (_, { gameExePath, dllPath }) => {
-      console.log(gameExePath)
-      console.log(dllPath)
+    ipcMain.on('luna:launchgame', (_, { gameExePath }) => {
+      const lunaFolderPath = join(app.getPath('userData'), 'Luna')
+      const dllPath = join(lunaFolderPath, "FortCurl.dll")
+      // 
       const ShippingEAC = path.join(
         gameExePath,
         'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping_BE.exe'
