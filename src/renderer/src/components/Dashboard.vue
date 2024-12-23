@@ -7,7 +7,7 @@
           <HomeTab @newsItem="newsItem" :LoginResponse="getData" />
         </div>
         <div v-if="currentTab === 'library'" key="library" class="tab-content">
-          <LibraryTab />
+          <LibraryTab @OpenLibraryPath="OpenLibraryPath" />
         </div>
 
         <div v-if="currentTab === 'newspopout'" key="newspopout" class="tab-content">
@@ -15,6 +15,17 @@
         </div>
       </div>
     </transition>
+  </div>
+
+  <div @click="OpenLibraryPath(false)" class="popup-overlay" v-if="LibraryshowPopup"  key="LibraryshowPopup">
+    <div @click.stop class="popup-content">
+      <span class="PopupTitle">Import Installation</span>
+      <span class="PopupDec">To get started, import your Fortnite installation folder that contains the "FortniteGame" and "Engine" directories.</span>
+      <div class="InputContr">
+        <input>
+        <div class="next-to-input"><!--next to input! --></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +41,8 @@ export default {
       currentTab: 'home',
       TabName: 'home',
       transitionName: 'slide-left',
-      newsData: null
+      newsData: null,
+      LibraryshowPopup: false
     }
   },
   components: {
@@ -64,15 +76,15 @@ export default {
       this.currentTab = null // this clears the background only
       this.transitionName = ''
       const fetchedNews = await window.electron.ipcRenderer.invoke('luna:get-news-data')
-      this.newsData = fetchedNews.PatchNotes[tab];
-      
+      this.newsData = fetchedNews.PatchNotes[tab]
+
       setTimeout(() => {
         this.transitionName = 'slide-left'
         this.currentTab = 'newspopout' // ig
       }, 100)
     },
     TabBack(tab) {
-      console.log("TEST + " + tab)
+      console.log('TEST + ' + tab)
       // just no check (buggy without proper use)
       this.currentTab = null
       this.transitionName = ''
@@ -81,6 +93,10 @@ export default {
         this.TabName = tab
         this.currentTab = tab
       }, 100)
+    },
+    OpenLibraryPath(Should = true) {
+      console.log(Should);
+      this.LibraryshowPopup  = Should
     }
   },
   computed: {
@@ -108,4 +124,66 @@ export default {
   transition: none;
   display: none;
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  width: 525px;
+  height: 200px;
+  background-color: #1C1C1C;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.PopupTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px; 
+}
+
+.PopupDec {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px; 
+}
+
+.InputContr {
+  display: flex;
+  align-items: center;
+}
+
+input {
+  margin-right: 10px;
+  width: 100%;
+  max-width: 180px;
+  height: 40px;
+  border: 2px solid #353535;
+
+  border-radius: 5px;
+
+}
+
+.next-to-input {
+  font-size: 12px;
+  color: #555;
+  width: 40px;
+  height: 40px;
+  background-color: #353535;
+}
+
 </style>

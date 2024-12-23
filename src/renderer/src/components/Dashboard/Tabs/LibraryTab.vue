@@ -19,7 +19,7 @@
       </div>
       <!--This one is forced and actually different-->
       <div class="LibItemForced">
-        <div class="LibItemOuter">
+        <div @click="$emit('OpenLibraryPath')" class="LibItemOuter">
           <div class="LibItemBottomForced">
             <span class="ImportFR">Import</span>
             <span class="ImportDec">Add a new instance of Fortnite.</span>
