@@ -6,26 +6,25 @@ const lunaFolderPath = join(app.getPath('userData'), 'Luna')
 const configFilePath = join(lunaFolderPath, 'config.ini')
 
 const checkIfExisests = async () => {
-    if (!existsSync(lunaFolderPath)) {
-        mkdirSync(lunaFolderPath)
+  if (!existsSync(lunaFolderPath)) {
+    mkdirSync(lunaFolderPath)
+  }
+
+  console.log(lunaFolderPath)
+
+  if (!existsSync(configFilePath)) {
+    const defaultConfig = {
+      auth: {
+        token: ''
       }
-  
-      console.log(lunaFolderPath);
-  
-      if (!existsSync(configFilePath)) {
-        const defaultConfig = {
-          auth: {
-            token: ''
-          }
-        }
-        writeFileSync(configFilePath, ini.stringify(defaultConfig), 'utf-8')
-      }
-  
+    }
+    writeFileSync(configFilePath, ini.stringify(defaultConfig), 'utf-8')
+  }
 }
 
 export const readTokenFromIni = () => {
   try {
-    checkIfExisests();
+    checkIfExisests()
     const config = ini.parse(readFileSync(configFilePath, 'utf-8'))
     return config.auth?.token || null
   } catch (error) {
@@ -34,10 +33,28 @@ export const readTokenFromIni = () => {
   }
 }
 
+export function writeToConfig(sectionName: string, pathKey: string, newValue: string): void {
+  try {
+    checkIfExisests()
+
+    const config = ini.parse(readFileSync(configFilePath, 'utf-8'))
+
+    if (!config[sectionName]) {
+      config[sectionName] = {}
+    }
+
+    config[sectionName][pathKey] = newValue;
+
+    writeFileSync(configFilePath, ini.stringify(config), 'utf-8')
+  } catch (error) {
+    console.error('Error wrting config file:', error)
+  }
+}
+
 export const saveTokenToIni = (token: string) => {
   try {
-    checkIfExisests();
-    
+    checkIfExisests()
+
     const config = ini.parse(readFileSync(configFilePath, 'utf-8'))
     config.auth = config.auth || {}
     config.auth.token = token

@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { update } from './updatecheck'
 import { AuthData } from '../types/AuthData'
-import { saveTokenToIni } from './IniConfig'
+import { saveTokenToIni, writeToConfig } from './IniConfig'
 import user, { login } from './login'
 
 import { spawn, execSync } from 'child_process'
@@ -16,6 +16,8 @@ let authData: AuthData | null = null
 import dllinjector from '../../resources/dllinjector.node';
 import { existsSync, lstatSync } from 'fs'
 import { GrabNews } from './GrabNews'
+import { getBuildVersion } from './VersionSearcher'
+import { handleBuildConfig } from './JsonConfig'
 
 function createWindow(): void {
   //registerProtocol()
@@ -125,6 +127,39 @@ function createWindow(): void {
       )
       dllinjector.injectDll(gameProcess.pid, dllPath);
       console.log('PORN!')
+    })
+
+    ipcMain.handle('luna:addpath', async (_, { PathValue }) => {
+        console.log(PathValue);
+        const fortniteGamePath = path.join(PathValue, 'FortniteGame');
+        const enginePath = path.join(PathValue, 'Engine');
+        const hasFortniteGame = existsSync(fortniteGamePath) && lstatSync(fortniteGamePath).isDirectory();
+        const hasEngine = existsSync(enginePath) && lstatSync(enginePath).isDirectory();
+    
+        if (hasFortniteGame && hasEngine) {
+          const gameExecutablePath = path.join(
+            PathValue,
+            'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
+          )
+
+          const result = await getBuildVersion(gameExecutablePath);
+
+          if(result == "ERROR") {
+              return "Error"
+          }else {
+            console.log(result);
+
+            handleBuildConfig(Buffer.from(result, 'utf-8').toString('base64'), result, PathValue)
+
+            //writeToConfig(PathValue, gameExecutablePath, Buffer.from(result, 'utf-8').toString('base64'))
+          }
+         
+          // other stuf
+          //getBuildVersion
+        }else {
+          // tell the thing that called this that theres a path error!
+          return "Error"
+        }
     })
 
     ipcMain.handle('dialog:openFile', async () => {

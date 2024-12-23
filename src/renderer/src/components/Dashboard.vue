@@ -44,7 +44,7 @@
             />
           </svg>
         </div>
-        <div class="next-to-input">
+        <div @click="AddBuildFR" class="next-to-input">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -58,12 +58,10 @@
             />
           </svg>
         </div>
-
-        
       </div>
-     
+
       <div class="RightContainer" v-if="messageMessage.trim() !== ''">
-        <span :style="{ color: messageColor }">{{ messageMessage}}</span>
+        <span :style="{ color: messageColor }">{{ messageMessage }}</span>
       </div>
     </div>
   </div>
@@ -84,7 +82,7 @@ export default {
       newsData: null,
       LibraryshowPopup: false,
       messageColor: 'orange',
-      messageMessage: ""
+      messageMessage: ''
     }
   },
   components: {
@@ -117,17 +115,16 @@ export default {
       window.electron.ipcRenderer.invoke('dialog:openFile').then((filePath) => {
         if (filePath) {
           if (filePath && !filePath.startsWith('Error')) {
-            this.$refs.fileInput.value = filePath; 
-          this.messageColor = "#5FFF81"
-            this.messageMessage = "Looks Good!"
-          }
-          else {
+            this.$refs.fileInput.value = filePath
+            this.messageColor = '#5FFF81'
+            this.messageMessage = 'Looks Good!'
+          } else {
             // error
-            this.messageColor = "red"
-            this.messageMessage = "error with path"
+            this.messageColor = 'red'
+            this.messageMessage = 'error with path'
           }
         }
-      });
+      })
     },
     async newsItem(tab) {
       console.log(tab)
@@ -155,7 +152,24 @@ export default {
     OpenLibraryPath(Should = true) {
       console.log(Should)
       this.LibraryshowPopup = Should
-      this.messageMessage = "";
+      this.messageMessage = ''
+    },
+    async AddBuildFR() {
+      console.log('SIGMA')
+      if (this.$refs.fileInput.value != '') {
+        console.log('YIPPIE')
+        var PathValue = this.$refs.fileInput.value
+        const AddPath = await window.electron.ipcRenderer.invoke('luna:addpath', { PathValue })
+
+        if (AddPath && !AddPath.startsWith('Error')) {
+          // close?
+        } else {
+          // error
+          this.messageColor = 'red'
+          this.messageMessage = 'error with path'
+        }
+        console.log(AddPath)
+      }
     }
   },
   computed: {
@@ -222,7 +236,7 @@ export default {
 }
 
 .InputContr {
-  position: relative; 
+  position: relative;
   display: flex;
   align-items: center;
 }
@@ -241,8 +255,6 @@ input {
   font-weight: 500;
   font-size: 16px;
   box-sizing: border-box;
-
-
 } /* C:\OG\1.11.0 */
 
 input:focus {
@@ -264,12 +276,12 @@ input:focus {
   position: absolute;
   right: 52px;
   top: 50%;
-  transform: translateY(-50%); 
+  transform: translateY(-50%);
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 34px; 
+  width: 34px;
   height: 34px;
   color: white;
   background-color: #1c1c1c;
@@ -285,13 +297,13 @@ input:focus {
   margin-top: 15px;
   width: 90%;
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   margin-left: auto;
   margin-right: 90%; /* works good enough */
 }
 
 .RightContainer span {
   font-size: 14px;
-  color: #5FFF81
+  color: #5fff81;
 }
 </style>
