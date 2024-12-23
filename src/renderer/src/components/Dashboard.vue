@@ -30,7 +30,20 @@
         "<strong>FortniteGame</strong>" and "<strong>Engine</strong>" directories.</span
       >
       <div class="InputContr">
-        <input />
+        <input type="text" placeholder="Enter your path" ref="fileInput" />
+        <div class="file-explorer-icon" @click="openFileExplorer">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.856 1.546l-.64 5.124A2.5 2.5 0 0 1 12.733 15H3.266a2.5 2.5 0 0 1-2.481-2.19l-.64-5.124A1.5 1.5 0 0 1 1 6.14zM2 6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3H2.5a.5.5 0 0 0-.5.5zm-.367 1a.5.5 0 0 0-.496.562l.64 5.124A1.5 1.5 0 0 0 3.266 14h9.468a1.5 1.5 0 0 0 1.489-1.314l.64-5.124A.5.5 0 0 0 14.367 7z"
+            />
+          </svg>
+        </div>
         <div class="next-to-input">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -45,6 +58,12 @@
             />
           </svg>
         </div>
+
+        
+      </div>
+     
+      <div class="RightContainer" v-if="messageMessage.trim() !== ''">
+        <span :style="{ color: messageColor }">{{ messageMessage}}</span>
       </div>
     </div>
   </div>
@@ -63,7 +82,9 @@ export default {
       TabName: 'home',
       transitionName: 'slide-left',
       newsData: null,
-      LibraryshowPopup: false
+      LibraryshowPopup: false,
+      messageColor: 'orange',
+      messageMessage: ""
     }
   },
   components: {
@@ -91,6 +112,22 @@ export default {
           this.currentTab = tab
         }, 100)
       }
+    },
+    openFileExplorer() {
+      window.electron.ipcRenderer.invoke('dialog:openFile').then((filePath) => {
+        if (filePath) {
+          if (filePath && !filePath.startsWith('Error')) {
+            this.$refs.fileInput.value = filePath; 
+          this.messageColor = "#5FFF81"
+            this.messageMessage = "Looks Good!"
+          }
+          else {
+            // error
+            this.messageColor = "red"
+            this.messageMessage = "error with path"
+          }
+        }
+      });
     },
     async newsItem(tab) {
       console.log(tab)
@@ -184,6 +221,7 @@ export default {
 }
 
 .InputContr {
+  position: relative; 
   display: flex;
   align-items: center;
 }
@@ -201,6 +239,9 @@ input {
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
+  box-sizing: border-box;
+
+
 } /* C:\OG\1.11.0 */
 
 input:focus {
@@ -209,12 +250,47 @@ input:focus {
 
 .next-to-input {
   color: white;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   background-color: #353535;
   border-radius: 5px;
-  display: flex;  
-  justify-content: center;  
+  display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.file-explorer-icon {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%); 
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 34px; 
+  height: 34px;
+  color: white;
+  background-color: #1c1c1c;
+}
+
+.file-explorer-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+.RightContainer {
+  margin-top: 15px;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end; 
+  margin-left: auto;
+  margin-right: 90%; /* works good enough */
+}
+
+.RightContainer span {
+  font-size: 14px;
+  color: #5FFF81
 }
 </style>

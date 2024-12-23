@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog  } from 'electron'
 import path, { join, resolve } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -14,7 +14,7 @@ let mainWindow: BrowserWindow | null
 let authData: AuthData | null = null
 
 import dllinjector from '../../resources/dllinjector.node';
-import { existsSync } from 'fs'
+import { existsSync, lstatSync } from 'fs'
 import { GrabNews } from './GrabNews'
 
 function createWindow(): void {
@@ -126,6 +126,31 @@ function createWindow(): void {
       dllinjector.injectDll(gameProcess.pid, dllPath);
       console.log('PORN!')
     })
+
+    ipcMain.handle('dialog:openFile', async () => {
+      const result = await dialog.showOpenDialog({
+        properties: ['openDirectory']
+      });
+    
+      if (result.canceled) {
+        return null;
+      } else {
+        // check if the folder contains "FortniteGame" and "Engine" if doesnt just send back a error!!
+        const selectedPath = result.filePaths[0];
+        const fortniteGamePath = path.join(selectedPath, 'FortniteGame');
+        const enginePath = path.join(selectedPath, 'Engine');
+        const hasFortniteGame = existsSync(fortniteGamePath) && lstatSync(fortniteGamePath).isDirectory();
+        const hasEngine = existsSync(enginePath) && lstatSync(enginePath).isDirectory();
+    
+        if (hasFortniteGame && hasEngine) {
+          return selectedPath;
+        }else {
+          return "Error"
+        }
+        
+        
+      }
+    });
     //ipcMain.on('luna:get-auth-data', async (_) => mainWindow!.webContents.send('AuthData', authData));
   }
 }
