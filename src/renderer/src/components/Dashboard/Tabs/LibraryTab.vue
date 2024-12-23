@@ -30,12 +30,15 @@ export default {
   data() {
     return {
       builds: [],
-      versionCache: {}
+      versionCache: {},
+      dataLoaded: false 
     }
   },
   methods: {
     async loadBuilds() {
+      if(this.dataLoaded) return;
       try {
+   
         const response = await window.electron.ipcRenderer.invoke('luna:get-builds')
         this.builds = response
         console.log('NIG' + this.builds)
@@ -45,6 +48,7 @@ export default {
             this.versionCache[note.VersionID] = await window.electron.ipcRenderer.invoke('luna:getBuildVersion', note.VersionID)
           }
         }
+        this.dataLoaded = true;
       } catch (error) {
         console.error('Failed to load builds:', error)
       }

@@ -20,7 +20,7 @@ html {
   width: 100%;
   display: grid;
 
-  grid-template-columns: repeat(auto-fill, 181px);
+  grid-template-columns: repeat(auto-fill, 175px);
   gap: 15px;
 }
 
@@ -55,6 +55,8 @@ html {
   justify-content: center;
   margin-bottom: 15px;
   margin-top: auto;
+  border-end-end-radius: 10px;
+  border-end-start-radius: 10px;
 }
 
 .ImportFR {
@@ -77,6 +79,8 @@ html {
     justify-content: center;
     margin-top: auto;
     background-color: rgba(0, 0, 0, 0.6);
+    border-end-end-radius: 10px;
+    border-end-start-radius: 10px;
   }
   
 .GameNameF {
