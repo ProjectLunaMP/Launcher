@@ -1,0 +1,92 @@
+body,
+html {
+  height: 100vh;
+  width: 100%;
+
+  margin: 0;
+}
+
+.outer-class {
+  margin-top: 25px;
+  margin-left: 30px;
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.LIBItemsGrid {
+  width: 100%;
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, 181px);
+  gap: 15px;
+}
+
+.LibItem {
+  width: 181px;
+  height: 280px;
+  border-radius: 10px;
+  background: url('https://cdn.discordapp.com/attachments/1319073287934050327/1319431163198177344/image.png?ex=67693b47&is=6767e9c7&hm=beaad3950ff06626861bc912bd4d0436b819ec95cc153be94572cc4f0ab6683e&')
+  center center / cover no-repeat;
+}
+
+.LibItemForced {
+  width: 181px;
+  height: 280px;
+  border: 2px solid #7b7b7b;
+  border-radius: 10px;
+  
+}
+
+.LibItemOuter {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.LibItemBottomForced {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  margin-top: auto;
+}
+
+.ImportFR {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.ImportDec {
+    font-size: 12px;
+    color: #D2D2D2;
+}
+
+.LibItemBottom {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    margin-top: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  
+.GameNameF {
+    margin-left: 15px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.GameVersion{
+    margin-left: 15px;
+    font-size: 12px;
+    color: #D2D2D2;
+}

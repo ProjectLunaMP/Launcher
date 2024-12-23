@@ -171,6 +171,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .SeasonNewsLaunchClock {
@@ -180,12 +181,17 @@ html {
   height: 25px;
   background-color: #00000077;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
 .OuterSeasonNewsLaunchClock {
   width: 100%;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .SeasonNewsInfo {
@@ -203,7 +209,7 @@ html {
 .SeasonNewsInfoSeason {
   font-size: 24px;
   font-weight: bold;
-  color: #a22d3e;
+  color: #FF0429;
 }
 
 .SeasonNewsInfoDec {
@@ -214,7 +220,7 @@ html {
 }
 
 .highlight {
-  color: #a22d3e;
+  color: #FF0429;
 }
 
 .SeasonNewsLaunchContentInfo {
