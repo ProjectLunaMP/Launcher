@@ -17,13 +17,34 @@
     </transition>
   </div>
 
-  <div @click="OpenLibraryPath(false)" class="popup-overlay" v-if="LibraryshowPopup"  key="LibraryshowPopup">
+  <div
+    @click="OpenLibraryPath(false)"
+    class="popup-overlay"
+    v-if="LibraryshowPopup"
+    key="LibraryshowPopup"
+  >
     <div @click.stop class="popup-content">
       <span class="PopupTitle">Import Installation</span>
-      <span class="PopupDec">To get started, import your Fortnite installation folder that contains the "<strong>FortniteGame</strong>" and "<strong>Engine</strong>" directories.</span>
+      <span class="PopupDec"
+        >To get started, import your Fortnite installation folder that contains the
+        "<strong>FortniteGame</strong>" and "<strong>Engine</strong>" directories.</span
+      >
       <div class="InputContr">
-        <input>
-        <div class="next-to-input"><!--next to input! --></div>
+        <input />
+        <div class="next-to-input">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M14.854 4.854a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 4H3.5A2.5 2.5 0 0 0 1 6.5v8a.5.5 0 0 0 1 0v-8A1.5 1.5 0 0 1 3.5 5h9.793l-3.147 3.146a.5.5 0 0 0 .708.708z"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -95,8 +116,8 @@ export default {
       }, 100)
     },
     OpenLibraryPath(Should = true) {
-      console.log(Should);
-      this.LibraryshowPopup  = Should
+      console.log(Should)
+      this.LibraryshowPopup = Should
     }
   },
   computed: {
@@ -141,25 +162,24 @@ export default {
 .popup-content {
   width: 525px;
   height: 200px;
-  background-color: #1C1C1C;
+  background-color: #1c1c1c;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
 }
 
 .PopupTitle {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 .PopupDec {
   font-size: 16px;
   text-align: center;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   width: 90%;
 }
 
@@ -179,22 +199,22 @@ input {
   outline: none;
   font-family: 'DM Sans', sans-serif;
   font-style: normal;
-font-weight: 500;
-font-size: 16px;
-}/* C:\OG\1.11.0 */
-
+  font-weight: 500;
+  font-size: 16px;
+} /* C:\OG\1.11.0 */
 
 input:focus {
   border-color: none;
 }
 
 .next-to-input {
-  font-size: 12px;
-  color: #555;
+  color: white;
   width: 45px;
   height: 45px;
   background-color: #353535;
   border-radius: 5px;
+  display: flex;  
+  justify-content: center;  
+  align-items: center;
 }
-
 </style>
