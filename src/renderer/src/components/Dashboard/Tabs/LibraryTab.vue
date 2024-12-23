@@ -1,19 +1,11 @@
 <template>
   <div class="outer-class">
     <div class="LIBItemsGrid">
-      <div class="LibItem">
+      <div v-for="(note, index) in builds" class="LibItem">
         <div class="LibItemOuter">
           <div class="LibItemBottom">
             <span class="GameNameF"> Fortnite </span>
-            <span class="GameVersion"> 1.11-CL-3807424 </span>
-          </div>
-        </div>
-      </div>
-      <div class="LibItem">
-        <div class="LibItemOuter">
-          <div class="LibItemBottom">
-            <span class="GameNameF"> Fortnite </span>
-            <span class="GameVersion"> 1.11-CL-3807424 </span>
+            <span class="GameVersion"> {{ versionCache[note.VersionID] || 'Loading...' }} </span>
           </div>
         </div>
       </div>
@@ -35,7 +27,30 @@
 
 <script>
 export default {
+  data() {
+    return {
+      builds: [],
+      versionCache: {}
+    }
+  },
   methods: {
+    async loadBuilds() {
+      try {
+        const response = await window.electron.ipcRenderer.invoke('luna:get-builds')
+        this.builds = response
+        console.log('NIG' + this.builds)
+
+        for (const note of this.builds) {
+          if (note.VersionID && !this.versionCache[note.VersionID]) {
+            this.versionCache[note.VersionID] = await window.electron.ipcRenderer.invoke('luna:getBuildVersion', note.VersionID)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load builds:', error)
+      }
+    },
+
+    // need to remove this (kinda forced)
     async launchGame() {
       try {
         const gameExePath = 'G:\\fortnite builds\\27548a59-417a-4b57-aeb9-9fe615855c31'
@@ -44,7 +59,10 @@ export default {
       } catch (error) {
         alert('Error launching game')
       }
-    }
+    },
+  },
+  mounted() {
+    this.loadBuilds()
   }
 }
 </script>

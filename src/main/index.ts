@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, dialog  } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import path, { join, resolve } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -13,11 +13,12 @@ import { spawn, execSync } from 'child_process'
 let mainWindow: BrowserWindow | null
 let authData: AuthData | null = null
 
-import dllinjector from '../../resources/dllinjector.node';
-import { existsSync, lstatSync } from 'fs'
+import dllinjector from '../../resources/dllinjector.node'
+import { existsSync, lstatSync, readFileSync, writeFileSync } from 'fs'
 import { GrabNews } from './GrabNews'
 import { getBuildVersion } from './VersionSearcher'
 import { handleBuildConfig } from './JsonConfig'
+import { FortniteDetect } from './FortniteDetect'
 
 function createWindow(): void {
   //registerProtocol()
@@ -57,16 +58,16 @@ function createWindow(): void {
     }
 
     ipcMain.handle('luna:update', async () => {
-      console.log(await update(mainWindow!));
-      if(!await update(mainWindow!)) {
-        return null;
+      console.log(await update(mainWindow!))
+      if (!(await update(mainWindow!))) {
+        return null
       }
 
-      await GrabNews(mainWindow!); // if news fail will just default to default news!
+      await GrabNews(mainWindow!) // if news fail will just default to default news!
 
       // Load Other stuff??? news
 
-      return "e";
+      return 'e'
     })
 
     ipcMain.handle('luna:login', () => {
@@ -97,10 +98,10 @@ function createWindow(): void {
         gameExePath,
         'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping_BE.exe'
       )
-      if(existsSync(ShippingEAC)) {
-        const EACProcess = spawn(ShippingEAC);
-        console.log(EACProcess.pid);
-        dllinjector.freezeProcess(EACProcess.pid);
+      if (existsSync(ShippingEAC)) {
+        const EACProcess = spawn(ShippingEAC)
+        console.log(EACProcess.pid)
+        dllinjector.freezeProcess(EACProcess.pid)
       }
 
       const ForniteLauncher = path.join(
@@ -108,83 +109,104 @@ function createWindow(): void {
         'FortniteGame\\Binaries\\Win64\\FortniteLauncher.exe'
       )
 
-      if(existsSync(ForniteLauncher)) {
-        const ForniteLauncherProcess = spawn(ForniteLauncher);
-        dllinjector.freezeProcess(ForniteLauncherProcess.pid);
+      if (existsSync(ForniteLauncher)) {
+        const ForniteLauncherProcess = spawn(ForniteLauncher)
+        dllinjector.freezeProcess(ForniteLauncherProcess.pid)
       }
-   
-     
+
       const gameExecutablePath = path.join(
         gameExePath,
         'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
       )
-      execSync("set OPENSSL_ia32cap=:~0x20000000");
+      execSync('set OPENSSL_ia32cap=:~0x20000000')
       const gameProcess = spawn(
         gameExecutablePath,
-        ('-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=e8eb05fag41046i3hd23c89c -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
-          user.user?.AccessToken).split(' '),
+        (
+          '-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=e8eb05fag41046i3hd23c89c -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
+          user.user?.AccessToken
+        ).split(' '),
         { env: { OPENSSL_ia32cap: ':~0x20000000' } }
       )
-      dllinjector.injectDll(gameProcess.pid, dllPath);
+      dllinjector.injectDll(gameProcess.pid, dllPath)
       console.log('PORN!')
     })
 
     ipcMain.handle('luna:addpath', async (_, { PathValue }) => {
-        console.log(PathValue);
-        const fortniteGamePath = path.join(PathValue, 'FortniteGame');
-        const enginePath = path.join(PathValue, 'Engine');
-        const hasFortniteGame = existsSync(fortniteGamePath) && lstatSync(fortniteGamePath).isDirectory();
-        const hasEngine = existsSync(enginePath) && lstatSync(enginePath).isDirectory();
-    
-        if (hasFortniteGame && hasEngine) {
-          const gameExecutablePath = path.join(
-            PathValue,
-            'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
-          )
+      console.log(PathValue)
+      const fortniteGamePath = path.join(PathValue, 'FortniteGame')
+      const enginePath = path.join(PathValue, 'Engine')
+      const hasFortniteGame =
+        existsSync(fortniteGamePath) && lstatSync(fortniteGamePath).isDirectory()
+      const hasEngine = existsSync(enginePath) && lstatSync(enginePath).isDirectory()
 
-          const result = await getBuildVersion(gameExecutablePath);
+      if (hasFortniteGame && hasEngine) {
+        const gameExecutablePath = path.join(
+          PathValue,
+          'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
+        )
 
-          if(result == "ERROR") {
-              return "Error"
-          }else {
-            console.log(result);
+        const result = await getBuildVersion(gameExecutablePath)
 
-            handleBuildConfig(Buffer.from(result, 'utf-8').toString('base64'), result, PathValue)
+        if (result == 'ERROR') {
+          return 'Error'
+        } else {
+          console.log(result)
 
-            //writeToConfig(PathValue, gameExecutablePath, Buffer.from(result, 'utf-8').toString('base64'))
-          }
-         
-          // other stuf
-          //getBuildVersion
-        }else {
-          // tell the thing that called this that theres a path error!
-          return "Error"
+          handleBuildConfig(Buffer.from(result, 'utf-8').toString('base64'), result, PathValue)
+
+          //writeToConfig(PathValue, gameExecutablePath, Buffer.from(result, 'utf-8').toString('base64'))
         }
+
+        // other stuf
+        //getBuildVersion
+      } else {
+        // tell the thing that called this that theres a path error!
+        return 'Error'
+      }
     })
 
     ipcMain.handle('dialog:openFile', async () => {
       const result = await dialog.showOpenDialog({
         properties: ['openDirectory']
-      });
-    
+      })
+
       if (result.canceled) {
-        return null;
+        return null
       } else {
         // check if the folder contains "FortniteGame" and "Engine" if doesnt just send back a error!!
-        const selectedPath = result.filePaths[0];
-        const fortniteGamePath = path.join(selectedPath, 'FortniteGame');
-        const enginePath = path.join(selectedPath, 'Engine');
-        const hasFortniteGame = existsSync(fortniteGamePath) && lstatSync(fortniteGamePath).isDirectory();
-        const hasEngine = existsSync(enginePath) && lstatSync(enginePath).isDirectory();
-    
+        const selectedPath = result.filePaths[0]
+        const fortniteGamePath = path.join(selectedPath, 'FortniteGame')
+        const enginePath = path.join(selectedPath, 'Engine')
+        const hasFortniteGame =
+          existsSync(fortniteGamePath) && lstatSync(fortniteGamePath).isDirectory()
+        const hasEngine = existsSync(enginePath) && lstatSync(enginePath).isDirectory()
+
         if (hasFortniteGame && hasEngine) {
-          return selectedPath;
-        }else {
-          return "Error"
+          return selectedPath
+        } else {
+          return 'Error'
         }
-        
-        
       }
+    })
+
+  
+    ipcMain.handle('luna:get-builds', async () => {
+      try {
+        const lunaFolderPath = join(app.getPath('userData'), 'Luna')
+        const FilePath = join(lunaFolderPath, 'builds.json')
+        if (!existsSync(FilePath)) {
+          writeFileSync(FilePath, JSON.stringify([]))
+        }
+        const builds = JSON.parse(readFileSync(FilePath, 'utf-8'))
+        return builds
+      } catch (error) {
+        console.error('Error reading build.json file!', error)
+        return []
+      }
+    })
+
+    ipcMain.handle("luna:getBuildVersion", async (_, buildString: string) => {
+      return FortniteDetect(buildString);
     });
     //ipcMain.on('luna:get-auth-data', async (_) => mainWindow!.webContents.send('AuthData', authData));
   }
