@@ -150,10 +150,9 @@ function createWindow(): void {
         if (result == 'ERROR') {
           return 'Error'
         } else {
-          console.log(result)
+          var Reponse = handleBuildConfig(Buffer.from(result, 'utf-8').toString('base64'), result, PathValue)
 
-          handleBuildConfig(Buffer.from(result, 'utf-8').toString('base64'), result, PathValue)
-
+          return Reponse;
           //writeToConfig(PathValue, gameExecutablePath, Buffer.from(result, 'utf-8').toString('base64'))
         }
 

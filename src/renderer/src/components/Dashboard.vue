@@ -7,7 +7,7 @@
           <HomeTab @newsItem="newsItem" :LoginResponse="getData" />
         </div>
         <div v-if="currentTab === 'library'" key="library" class="tab-content">
-          <LibraryTab @OpenLibraryPath="OpenLibraryPath" />
+          <LibraryTab ref="libraryTab" @OpenLibraryPath="OpenLibraryPath" />
         </div>
 
         <div v-if="currentTab === 'newspopout'" key="newspopout" class="tab-content">
@@ -162,7 +162,16 @@ export default {
         const AddPath = await window.electron.ipcRenderer.invoke('luna:addpath', { PathValue })
 
         if (AddPath && !AddPath.startsWith('Error')) {
-          // close?
+          if (AddPath == 'already~build') {
+            this.messageColor = 'orange'
+            this.messageMessage = 'You already added this build'
+            this.$refs.libraryTab.loadBuilds(true); // ehhh why not
+          } else {
+            // close?
+            this.OpenLibraryPath(false)
+            // tell library to reload or smth/?!?!
+            this.$refs.libraryTab.loadBuilds(true);
+          }
         } else {
           // error
           this.messageColor = 'red'

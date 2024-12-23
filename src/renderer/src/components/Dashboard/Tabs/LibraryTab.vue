@@ -35,7 +35,9 @@ export default {
     }
   },
   methods: {
-    async loadBuilds() {
+    async loadBuilds(shouldturnfalse) {
+      if(shouldturnfalse) this.dataLoaded = false;
+      console.log(this.dataLoaded)
       if(this.dataLoaded) return;
       try {
    
