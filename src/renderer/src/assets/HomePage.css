@@ -261,6 +261,7 @@ html {
   grid-template-columns: repeat(auto-fill, 300px);
   width: 100%;
   box-sizing: border-box;
+  padding-bottom: 20px;
 }
 
 .AllNewsGridItem {
