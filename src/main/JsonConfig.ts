@@ -53,7 +53,7 @@ export async function handleBuildConfig(
       played: new Date().toISOString()
     }
 
-    jsonArray.push(buildConfig)
+    jsonArray.unshift(buildConfig);
 
     await writeFileSync(FilePath, JSON.stringify(jsonArray, null, 2))
     return 'added'
