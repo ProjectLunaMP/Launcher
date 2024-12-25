@@ -1,6 +1,7 @@
 import { BrowserWindow } from 'electron'
 import { readTokenFromIni } from './IniConfig'
 import { AuthData } from '../types/AuthData'
+import { LauncherNews } from '../types/NewsData'
 import axios from 'axios'
 
 class UserService {
@@ -58,7 +59,7 @@ class UserService {
 const user = new UserService();
 export default user;
 
-export async function login(authData: AuthData, mainWindow: BrowserWindow): Promise<AuthData | null> {
+export async function login(mainWindow: BrowserWindow): Promise<AuthData | null> {
   var TOKEN = readTokenFromIni()
   console.log('TOKEN ' + TOKEN)
   try {

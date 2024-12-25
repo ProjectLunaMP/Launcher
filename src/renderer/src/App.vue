@@ -16,7 +16,7 @@ const IsLoggedIn = ref<boolean | false>(false)
 //const isLoading = ref(true)
 window.electron.ipcRenderer.invoke('luna:update').then(async (e) => {
   if(!e) return;
-  var LoginResponse = await window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
+  await window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
     LoginData.value = LoginResponse
   })
 })

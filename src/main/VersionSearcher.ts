@@ -1,7 +1,7 @@
 import { openSync, read, readSync, statSync } from "fs";
 
 function search(src: Buffer, pattern: Buffer): number[] {
-    let indices = [];
+    let indices: number[] = [];
     const maxSearchIndex = src.length - pattern.length;
 
     for (let i = 0; i <= maxSearchIndex; i++) {
@@ -31,7 +31,7 @@ export async function getBuildVersion(exePath: string): Promise<string> {
     try {
         const fileSize = statSync(exePath).size;
         const chunkSize = Math.floor(fileSize / numThreads);
-        const tasks = [];
+        const tasks: Promise<void>[] = [];
         for (let i = 0; i < numThreads; i++) {
             const startPosition = i * chunkSize;
             const endPosition = i === numThreads - 1 ? fileSize : startPosition + chunkSize;
@@ -40,7 +40,7 @@ export async function getBuildVersion(exePath: string): Promise<string> {
                 const fd = openSync(exePath, 'r');
                 const buffer = Buffer.alloc(endPosition - startPosition);
 
-                read(fd, buffer, 0, buffer.length, startPosition, (err, bytesRead) => {
+                read(fd, buffer, 0, buffer.length, startPosition, (err, _) => {
                     if (err) return reject(err);
 
                     const pattern = Buffer.from('++Fortnite+Release-', 'utf16le');

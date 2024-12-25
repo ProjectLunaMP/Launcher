@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { update } from './updatecheck'
 import { AuthData } from '../types/AuthData'
-import { saveTokenToIni, writeToConfig } from './IniConfig'
+import { saveTokenToIni } from './IniConfig'
 import user, { login } from './login'
 
 import { spawn, execSync } from 'child_process'
@@ -63,7 +63,7 @@ function createWindow(): void {
         return null
       }
 
-      await GrabNews(mainWindow!) // if news fail will just default to default news!
+      await GrabNews() // if news fail will just default to default news!
 
       // Load Other stuff??? news
 
@@ -71,7 +71,7 @@ function createWindow(): void {
     })
 
     ipcMain.handle('luna:login', () => {
-      return login(authData!, mainWindow!)
+      return login(/*authData!, */mainWindow!)
     })
 
     ipcMain.on('luna:auth-data', async (_, token: string, data: AuthData) => {

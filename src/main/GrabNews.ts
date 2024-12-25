@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { BrowserWindow } from 'electron'
+//import { BrowserWindow } from 'electron'
 import user from './login'
 
-export async function GrabNews(mainWindow: BrowserWindow): Promise<void> {
+export async function GrabNews(): Promise<void> {
   try {
     const response = await axios.get('http://127.0.0.1:1111/launcher/api/v1/news')
 

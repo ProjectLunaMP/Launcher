@@ -1,6 +1,6 @@
 type Tag = string;
 
-interface PatchNote {
+export interface PatchNote {
   Title: string;
   Tags: Tag[]; 
   DateUploaded: string; 
@@ -9,6 +9,6 @@ interface PatchNote {
   NewsContent: string; 
 }
 
-interface LauncherNews {
+export interface LauncherNews {
   PatchNotes: PatchNote[]; 
 }
