@@ -92,7 +92,7 @@ function createWindow(): void {
       return user.news
     })
 
-    ipcMain.on('luna:launchgame', (event, { gameExePath }) => {
+    ipcMain.on('luna:launchgame', (_, { gameExePath }) => {
       setImmediate(() => {
         mainWindow?.webContents.send('gameStatus', { Launching: true });
 
