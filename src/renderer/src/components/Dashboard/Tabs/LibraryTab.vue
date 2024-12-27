@@ -75,7 +75,10 @@ export default {
     async launchGame(gameExePath) {
       try {
         //const gameExePath = 'G:\\fortnite builds\\27548a59-417a-4b57-aeb9-9fe615855c31'
-        window.electron.ipcRenderer.send('luna:launchgame', { gameExePath })
+        
+        // sends dashboard page info to popup!
+        
+        window.electron.ipcRenderer.send('luna:launchgame', { gameExePath });
       } catch (error) {
         alert('Error launching game')
       }

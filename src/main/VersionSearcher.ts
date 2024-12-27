@@ -1,4 +1,4 @@
-import { openSync, read, readSync, statSync } from "fs";
+import { openSync, readSync, statSync } from "fs";
 
 function search(src: Buffer, pattern: Buffer): number[] {
     let indices: number[] = [];
@@ -27,41 +27,38 @@ export async function getBuildVersion(exePath: string): Promise<string> {
     let result = '';
     const numThreads = require('os').cpus().length;
     let allMatchingPos: number[] = [];
+    const pattern = Buffer.from('++Fortnite+Release-', 'utf16le');
 
     try {
         const fileSize = statSync(exePath).size;
         const chunkSize = Math.floor(fileSize / numThreads);
-        const tasks: Promise<void>[] = [];
-        for (let i = 0; i < numThreads; i++) {
-            const startPosition = i * chunkSize;
-            const endPosition = i === numThreads - 1 ? fileSize : startPosition + chunkSize;
 
-            const task = new Promise<void>((resolve, reject) => {
+        const tasks = Array.from({ length: numThreads }, (_, i) => {
+            return new Promise<void>((resolve, reject) => {
+                const startPosition = i * chunkSize;
+                const endPosition = i === numThreads - 1 ? fileSize : startPosition + chunkSize;
                 const fd = openSync(exePath, 'r');
                 const buffer = Buffer.alloc(endPosition - startPosition);
 
-                read(fd, buffer, 0, buffer.length, startPosition, (err, _) => {
-                    if (err) return reject(err);
-
-                    const pattern = Buffer.from('++Fortnite+Release-', 'utf16le');
+                try {
+                    readSync(fd, buffer, 0, buffer.length, startPosition);
                     const matchingPositions = search(buffer, pattern);
-
                     allMatchingPos.push(...matchingPositions.map(pos => pos + startPosition));
                     resolve();
-                });
+                } catch (err) {
+                    reject(err);
+                }
             });
+        });
 
-            tasks.push(task);
-        }
-
-        await Promise.all(tasks); 
+        await Promise.all(tasks);
 
         if (allMatchingPos.length !== 0) {
-            for (const num of allMatchingPos) {
+            for (const pos of allMatchingPos) {
                 const fd = openSync(exePath, 'r');
                 const buffer = Buffer.alloc(100);
+                readSync(fd, buffer, 0, buffer.length, pos);
 
-                readSync(fd, buffer, 0, buffer.length, num);
                 const chunkText = buffer.toString('utf16le');
                 const match = chunkText.match(/\+\+Fortnite\+Release-(\d+(\.\d+){0,2}|Live|Next|Cert)-CL-\d+/i);
 

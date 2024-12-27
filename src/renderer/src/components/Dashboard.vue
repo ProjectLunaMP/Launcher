@@ -17,6 +17,11 @@
     </transition>
   </div>
 
+  <LaunchingPopup />
+  <div>
+
+  </div>
+
   <div
     @click="OpenLibraryPath(false)"
     class="popup-overlay"
@@ -72,6 +77,7 @@ import NavBarScreen from './Dashboard/Nav.vue'
 import HomeTab from './Dashboard/Tabs/HomeTab.vue'
 import LibraryTab from './Dashboard/Tabs/LibraryTab.vue'
 import NewsPage from './Dashboard/Tabs/NewsPage.vue'
+import LaunchingPopup from './LaunchingPopup.vue';
 
 export default {
   data() {
@@ -80,7 +86,7 @@ export default {
       TabName: 'home',
       transitionName: 'slide-left',
       newsData: null,
-      LibraryshowPopup: false,
+      GameLaunchingPopup: true,
       messageColor: 'orange',
       messageMessage: ''
     }
@@ -89,7 +95,8 @@ export default {
     NavBarScreen,
     HomeTab,
     LibraryTab,
-    NewsPage
+    NewsPage,
+    LaunchingPopup
   },
   props: {
     LoginResponse: {

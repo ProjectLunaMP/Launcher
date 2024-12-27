@@ -7,18 +7,19 @@ import { AuthData } from '../types/AuthData'
 import { saveTokenToIni } from './IniConfig'
 import user, { login } from './login'
 
-import { spawn, execSync } from 'child_process'
+//import { spawn, execSync } from 'child_process'
 //import axios from 'axios'
 
 let mainWindow: BrowserWindow | null
 let authData: AuthData | null = null
 
-import dllinjector from '../../resources/dllinjector.node'
+//import dllinjector from '../../resources/dllinjector.node'
 import { existsSync, lstatSync, readFileSync, writeFileSync } from 'fs'
 import { GrabNews } from './GrabNews'
 import { getBuildVersion } from './VersionSearcher'
 import { handleBuildConfig } from './JsonConfig'
 import { FortniteDetect } from './FortniteDetect'
+import { Worker, WorkerOptions } from 'worker_threads'
 
 function createWindow(): void {
   //registerProtocol()
@@ -71,7 +72,7 @@ function createWindow(): void {
     })
 
     ipcMain.handle('luna:login', () => {
-      return login(/*authData!, */mainWindow!)
+      return login(/*authData!, */ mainWindow!)
     })
 
     ipcMain.on('luna:auth-data', async (_, token: string, data: AuthData) => {
@@ -91,44 +92,41 @@ function createWindow(): void {
       return user.news
     })
 
-    ipcMain.on('luna:launchgame', (_, { gameExePath }) => {
-      const lunaFolderPath = join(app.getPath('userData'), 'Luna')
-      const dllPath = join(lunaFolderPath, "FortCurl.dll")
-      // 
-      const ShippingEAC = path.join(
-        gameExePath,
-        'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping_BE.exe'
-      )
-      if (existsSync(ShippingEAC)) {
-        const EACProcess = spawn(ShippingEAC)
-        console.log(EACProcess.pid)
-        dllinjector.freezeProcess(EACProcess.pid)
-      }
+    ipcMain.on('luna:launchgame', (event, { gameExePath }) => {
+      setImmediate(() => {
+        mainWindow?.webContents.send('gameStatus', { Launching: true });
 
-      const ForniteLauncher = path.join(
-        gameExePath,
-        'FortniteGame\\Binaries\\Win64\\FortniteLauncher.exe'
-      )
+        const lunaFolderPath = join(app.getPath('userData'), 'Luna')
+        const dllPath = join(lunaFolderPath, 'FortCurl.dll')
+        //
+        const workerOptions: WorkerOptions = {
+          workerData: { gameExePath, dllPath, user: user }
+        }
 
-      if (existsSync(ForniteLauncher)) {
-        const ForniteLauncherProcess = spawn(ForniteLauncher)
-        dllinjector.freezeProcess(ForniteLauncherProcess.pid)
-      }
+        const worker = new Worker(path.join(__dirname, '_gameWorker.js'), workerOptions)
 
-      const gameExecutablePath = path.join(
-        gameExePath,
-        'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
-      )
-      execSync('set OPENSSL_ia32cap=:~0x20000000')
-      const gameProcess = spawn(
-        gameExecutablePath,
-        (
-          '-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=e8eb05fag41046i3hd23c89c -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
-          user.user?.AccessToken
-        ).split(' '),
-        { env: { OPENSSL_ia32cap: ':~0x20000000' } }
-      )
-      dllinjector.injectDll(gameProcess.pid, dllPath)
+        worker.on('message', (message) => {
+          if (message.status === 'success') {
+            console.log('Game launched successfully!')
+            //event.sender.send('luna:gameStatus', 'Game launched successfully!')
+            mainWindow?.webContents.send('gameStatus', { Launching: false });
+          } else {
+            console.error('Error launching game:', message.message)
+            mainWindow?.webContents.send('gameStatus', { Launching: false });
+          }
+        })
+
+        worker.on('error', (error) => {
+          console.error('Worker error:', error)
+          mainWindow?.webContents.send('gameStatus', { Launching: false });
+        })
+
+        worker.on('exit', (code) => {
+          if (code !== 0) {
+            console.error(`Worker stopped with exit code ${code}`)
+          }
+        })
+      })
       console.log('PORN!')
     })
 
@@ -151,9 +149,13 @@ function createWindow(): void {
         if (result == 'ERROR') {
           return 'Error'
         } else {
-          var Reponse = handleBuildConfig(Buffer.from(result, 'utf-8').toString('base64'), result, PathValue)
+          var Reponse = handleBuildConfig(
+            Buffer.from(result, 'utf-8').toString('base64'),
+            result,
+            PathValue
+          )
 
-          return Reponse;
+          return Reponse
           //writeToConfig(PathValue, gameExecutablePath, Buffer.from(result, 'utf-8').toString('base64'))
         }
 
@@ -189,7 +191,6 @@ function createWindow(): void {
       }
     })
 
-  
     ipcMain.handle('luna:get-builds', async () => {
       try {
         const lunaFolderPath = join(app.getPath('userData'), 'Luna')
@@ -205,9 +206,9 @@ function createWindow(): void {
       }
     })
 
-    ipcMain.handle("luna:getBuildVersion", async (_, buildString: string) => {
-      return FortniteDetect(buildString);
-    });
+    ipcMain.handle('luna:getBuildVersion', async (_, buildString: string) => {
+      return FortniteDetect(buildString)
+    })
     //ipcMain.on('luna:get-auth-data', async (_) => mainWindow!.webContents.send('AuthData', authData));
   }
 }
