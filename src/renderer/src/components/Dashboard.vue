@@ -88,7 +88,8 @@ export default {
       newsData: null,
       GameLaunchingPopup: true,
       messageColor: 'orange',
-      messageMessage: ''
+      messageMessage: '',
+      LibraryshowPopup: false
     }
   },
   components: {
