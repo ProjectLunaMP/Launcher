@@ -38,7 +38,7 @@ try {
     const gameProcess = spawn(
         gameExecutablePath,
         (
-          '-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=e8eb05fag41046i3hd23c89c -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
+          '-epicapp=Fortnite -epicenv=Prod -epiclocale=en-us -epicportal -skippatchcheck -noeac -fromfl=be -fltoken=h1cdhchd10150221h130eB56 -frombe AUTH_TYPE=exchangecode -AUTH_LOGIN=unused -AUTH_PASSWORD=' +
           user.user?.AccessToken
         ).split(' '),
         { env: { OPENSSL_ia32cap: ':~0x20000000' } }
