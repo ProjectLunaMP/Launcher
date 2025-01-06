@@ -1,6 +1,9 @@
 export function FortniteDetect(buildString: string): string {
   if (buildString.includes('3724489')) {
     buildString = '1.8'
+  }
+  else if (buildString.includes('3700114')) {
+    buildString = '1.7.2'
   } else if (buildString.includes('3807424')) {
     buildString = '1.11'
   } else if (buildString.includes('3870737')) {

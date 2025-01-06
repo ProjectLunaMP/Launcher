@@ -17,7 +17,7 @@ let authData: AuthData | null = null
 import { existsSync, lstatSync, readFileSync, writeFileSync } from 'fs'
 import { GrabNews } from './GrabNews'
 import { getBuildVersion } from './VersionSearcher'
-import { handleBuildConfig } from './JsonConfig'
+import { handleBuildConfig, TempBuildData } from './JsonConfig'
 import { FortniteDetect } from './FortniteDetect'
 import { Worker, WorkerOptions } from 'worker_threads'
 
@@ -71,6 +71,10 @@ function createWindow(): void {
       return 'e'
     })
 
+    ipcMain.handle('luna:GetTempBuildData', () => {
+      return TempBuildData
+    })
+
     ipcMain.handle('luna:login', () => {
       return login(/*authData!, */ mainWindow!)
     })
@@ -94,7 +98,7 @@ function createWindow(): void {
 
     ipcMain.on('luna:launchgame', (_, { gameExePath }) => {
       setImmediate(() => {
-        mainWindow?.webContents.send('gameStatus', { Launching: true });
+        mainWindow?.webContents.send('gameStatus', { Launching: true })
 
         const lunaFolderPath = join(app.getPath('userData'), 'Luna')
         const dllPath = join(lunaFolderPath, 'FortCurl.dll')
@@ -109,16 +113,16 @@ function createWindow(): void {
           if (message.status === 'success') {
             console.log('Game launched successfully!')
             //event.sender.send('luna:gameStatus', 'Game launched successfully!')
-            mainWindow?.webContents.send('gameStatus', { Launching: false });
+            mainWindow?.webContents.send('gameStatus', { Launching: false })
           } else {
             console.error('Error launching game:', message.message)
-            mainWindow?.webContents.send('gameStatus', { Launching: false });
+            mainWindow?.webContents.send('gameStatus', { Launching: false })
           }
         })
 
         worker.on('error', (error) => {
           console.error('Worker error:', error)
-          mainWindow?.webContents.send('gameStatus', { Launching: false });
+          mainWindow?.webContents.send('gameStatus', { Launching: false })
         })
 
         worker.on('exit', (code) => {
@@ -149,13 +153,14 @@ function createWindow(): void {
         if (result == 'ERROR') {
           return 'Error'
         } else {
-          var Reponse = handleBuildConfig(
-            Buffer.from(result, 'utf-8').toString('base64'),
-            result,
-            PathValue
-          )
+          var VersionID = Buffer.from(result, 'utf-8').toString('base64')
+          console.log('BUILD ID IS ' + VersionID)
+          TempBuildData.VersionID = result
+          TempBuildData.buildID = VersionID
+          TempBuildData.buildPath = PathValue
+          TempBuildData.played = '0'
 
-          return Reponse
+          return 'added'
           //writeToConfig(PathValue, gameExecutablePath, Buffer.from(result, 'utf-8').toString('base64'))
         }
 
@@ -165,6 +170,18 @@ function createWindow(): void {
         // tell the thing that called this that theres a path error!
         return 'Error'
       }
+    })
+
+    ipcMain.handle('luna:addpathV2', async (_) => {
+      var Response = await handleBuildConfig(
+        TempBuildData.buildID,
+        TempBuildData.VersionID,
+        TempBuildData.buildPath
+      )
+
+      console.log(Response);
+
+      return Response;
     })
 
     ipcMain.handle('dialog:openFile', async () => {

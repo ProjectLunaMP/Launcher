@@ -18,9 +18,6 @@
   </div>
 
   <LaunchingPopup />
-  <div>
-
-  </div>
 
   <div
     @click="OpenLibraryPath(false)"
@@ -70,6 +67,35 @@
       </div>
     </div>
   </div>
+
+  <div
+    @click="OpenLibraryPathFinal(false)"
+    class="popup-overlay"
+    v-if="LibraryshowPopupFinal"
+    key="LibraryshowPopupFinal"
+  >
+    <div @click.stop class="popup-contentFinal">
+      <span class="PopupTitleFinal">Import Installation</span>
+      <div class="popup-contentBox">
+        <div class="Image-container">
+          <img
+            class="ImageClass"
+            src="https://imgs.search.brave.com/Imr9HmKFIWPmoe4UyHrjUGN2fTch3QPS-W4dm2AOGTo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFlSHVwRUVIUlMu/anBn"
+            alt="Popup Image"
+          />
+        </div>
+
+        <div class="info-container">
+          <a class="InfoTitle">Fortnite</a>
+          <a class="Smallerthingy">Version: {{ BuildID }}</a>
+          <a class="Smallerthingy">Size on Disk: TDB</a>
+          <a class="Smallerthingy">Release Date: TDB</a>
+
+          <div @click="AddBuildFRV2" class="FinalButtonThing">Add to Library</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -77,7 +103,7 @@ import NavBarScreen from './Dashboard/Nav.vue'
 import HomeTab from './Dashboard/Tabs/HomeTab.vue'
 import LibraryTab from './Dashboard/Tabs/LibraryTab.vue'
 import NewsPage from './Dashboard/Tabs/NewsPage.vue'
-import LaunchingPopup from './LaunchingPopup.vue';
+import LaunchingPopup from './LaunchingPopup.vue'
 
 export default {
   data() {
@@ -89,7 +115,9 @@ export default {
       GameLaunchingPopup: true,
       messageColor: 'orange',
       messageMessage: '',
-      LibraryshowPopup: false
+      LibraryshowPopup: false,
+      LibraryshowPopupFinal: false,
+      BuildID: '0-CL'
     }
   },
   components: {
@@ -162,10 +190,15 @@ export default {
       this.LibraryshowPopup = Should
       this.messageMessage = ''
     },
+    OpenLibraryPathFinal(Should = true) {
+      console.log(Should)
+      this.LibraryshowPopupFinal = Should
+      //this.messageMessage = ''
+    },
     async AddBuildFR() {
       console.log('SIGMA')
       if (this.$refs.fileInput.value != '') {
-        console.log('YIPPIE')
+        //console.log('YIPPIE')
         var PathValue = this.$refs.fileInput.value
         const AddPath = await window.electron.ipcRenderer.invoke('luna:addpath', { PathValue })
 
@@ -173,12 +206,22 @@ export default {
           if (AddPath == 'already~build') {
             this.messageColor = 'orange'
             this.messageMessage = 'You already added this build'
-            this.$refs.libraryTab.loadBuilds(true); // ehhh why not
+            this.$refs.libraryTab.loadBuilds(true) // ehhh why not
           } else {
-            // close?
+            // ngl we need to check if the fully failed but who cares
+            // since we can't send strings back we need to get the json data
+            //luna:GetTempBuildData
             this.OpenLibraryPath(false)
-            // tell library to reload or smth/?!?!
-            this.$refs.libraryTab.loadBuilds(true);
+            // if it fails it will just not show lol
+            const data = await window.electron.ipcRenderer.invoke('luna:GetTempBuildData')
+            this.BuildID = data.VersionID.split('-')
+            if (this.BuildID.length >= 3) {
+              this.BuildID = this.BuildID.slice(1).join('-')
+            } else {
+              this.BuildID = data.VersionID
+            }
+
+            this.OpenLibraryPathFinal(true)
           }
         } else {
           // error
@@ -186,6 +229,22 @@ export default {
           this.messageMessage = 'error with path'
         }
         console.log(AddPath)
+      }
+    },
+    async AddBuildFRV2() {
+      // we just grab temp data lol so we don't need params
+      const AddPathV2 = await window.electron.ipcRenderer.invoke('luna:addpathV2')
+
+      if (AddPathV2 && !AddPathV2.startsWith('Error')) {
+        // close?
+        this.OpenLibraryPath(false)
+        this.OpenLibraryPathFinal(false)
+
+        // tell library to reload or smth/?!?!
+        this.$refs.libraryTab.loadBuilds(true)
+      } else {
+        // NEED TO DO
+        console.log('ERror btw')
       }
     }
   },
@@ -322,5 +381,78 @@ input:focus {
 .RightContainer span {
   font-size: 14px;
   color: #5fff81;
+}
+
+/* NEED TO MOVE  */
+.PopupTitleFinal {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.popup-contentFinal {
+  width: 630px;
+  height: 400px;
+  background-color: #1c1c1c;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.popup-contentBox {
+  width: 90%;
+  display: flex;
+  gap: 20px;
+}
+
+.Image-container {
+  width: 240px;
+  height: 309.14px;
+}
+.ImageClass {
+  width: 240px;
+  height: 309.14px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+}
+
+.info-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+  position: relative;
+}
+
+.InfoTitle {
+  font-size: 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: bold;
+}
+
+.Smallerthingy {
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: bold;
+}
+
+.FinalButtonThing {
+  background-color: #363636;
+  width: 170px;
+  height: 40px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  position: absolute;
+  bottom: 0;
+  border-radius: 5px;
+  right: 0;
 }
 </style>

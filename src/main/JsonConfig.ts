@@ -9,6 +9,13 @@ interface BuildConfig {
   played: string
 }
 
+export let TempBuildData: BuildConfig = {
+  VersionID: '',
+  buildPath: '',
+  buildID: '',
+  played: '',
+}
+
 export async function handleBuildConfig(
   buildID: string,
   VersionID: string,
@@ -44,7 +51,10 @@ export async function handleBuildConfig(
     await writeFileSync(FilePath, JSON.stringify(jsonArray, null, 2))
     return 'already~build'
   } else {
+    // We found the build!!! now instead of 
+    // adding the build we save this temp data!
     console.log('BUILD ID IS ' + buildID)
+
 
     const buildConfig: BuildConfig = {
       VersionID,
@@ -56,6 +66,8 @@ export async function handleBuildConfig(
     jsonArray.unshift(buildConfig);
 
     await writeFileSync(FilePath, JSON.stringify(jsonArray, null, 2))
-    return 'added'
+    return 'sigma' 
   }
+
+  return "weird"
 }
