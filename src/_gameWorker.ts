@@ -13,8 +13,12 @@ try {
         'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping_BE.exe'
     );
 
+
+    let EACProcess = null;
+    let FortniteLauncherProcess = null;
+
     if (existsSync(ShippingEAC)) {
-        const EACProcess = spawn(ShippingEAC);
+        EACProcess = spawn(ShippingEAC);
         console.log(EACProcess.pid)
         dllinjector.freezeProcess(EACProcess.pid);
     }
@@ -25,8 +29,8 @@ try {
     );
 
     if (existsSync(ForniteLauncher)) {
-        const ForniteLauncherProcess = spawn(ForniteLauncher);
-        dllinjector.freezeProcess(ForniteLauncherProcess.pid);
+        FortniteLauncherProcess = spawn(ForniteLauncher);
+        dllinjector.freezeProcess(FortniteLauncherProcess.pid);
     }
 
     const gameExecutablePath = path.join(
@@ -44,6 +48,18 @@ try {
         { env: { OPENSSL_ia32cap: ':~0x20000000' } }
       )
     dllinjector.injectDll(gameProcess.pid, dllPath);
+
+    gameProcess.on('close', (code) => {
+        if(EACProcess) {
+            console.log(`Closing EAC Process with PID: ${EACProcess.pid}`);
+            EACProcess.kill();
+        }
+
+        if(FortniteLauncherProcess) {
+            console.log(`Closing Launcher Process with PID: ${FortniteLauncherProcess.pid}`);
+            FortniteLauncherProcess.kill();
+        }
+    });
 
     parentPort?.postMessage({ status: 'success' });
 } catch (error) {
