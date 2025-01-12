@@ -54,8 +54,8 @@ export async function getBuildVersion(exePath: string): Promise<string> {
         await Promise.all(tasks);
 
         if (allMatchingPos.length !== 0) {
+            const fd = openSync(exePath, 'r'); // we cant keep opening this lol
             for (const pos of allMatchingPos) {
-                const fd = openSync(exePath, 'r');
                 const buffer = Buffer.alloc(100);
                 readSync(fd, buffer, 0, buffer.length, pos);
 
