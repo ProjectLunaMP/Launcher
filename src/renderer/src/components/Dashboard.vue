@@ -1,18 +1,28 @@
 <template>
-  <NavBarScreen @changeTab="setTab" :currentTab="TabName" :LoginResponse="getData" />
-  <div style="margin-left: 258px; overflow: hidden">
+  <div v-if="!bIsInSettings">
+    <NavBarScreen @changeTab="setTab" :currentTab="TabName" :LoginResponse="getData" />
+    <div style="margin-left: 258px; overflow: hidden">
+      <transition :name="transitionName">
+        <div :key="currentTab" class="tab-content">
+          <div v-if="currentTab === 'home'" key="home" class="tab-content">
+            <HomeTab @newsItem="newsItem" :LoginResponse="getData" />
+          </div>
+          <div v-if="currentTab === 'library'" key="library" class="tab-content">
+            <LibraryTab ref="libraryTab" @OpenLibraryPath="OpenLibraryPath" />
+          </div>
+
+          <div v-if="currentTab === 'newspopout'" key="newspopout" class="tab-content">
+            <NewsPage @back="TabBack" :newsData="newsData" />
+          </div>
+        </div>
+      </transition>
+    </div>
+  </div>
+  <div v-else>
     <transition :name="transitionName">
       <div :key="currentTab" class="tab-content">
-        <div v-if="currentTab === 'home'" key="home" class="tab-content">
-          <HomeTab @newsItem="newsItem" :LoginResponse="getData" />
-        </div>
-        <div v-if="currentTab === 'library'" key="library" class="tab-content">
-          <LibraryTab ref="libraryTab" @OpenLibraryPath="OpenLibraryPath" />
-        </div>
-
-        <div v-if="currentTab === 'newspopout'" key="newspopout" class="tab-content">
-          <NewsPage @back="TabBack" :newsData="newsData" />
-        </div>
+        <SettingsNav @back="GoBack" />
+        <h1>test</h1>
       </div>
     </transition>
   </div>
@@ -104,6 +114,8 @@ import HomeTab from './Dashboard/Tabs/HomeTab.vue'
 import LibraryTab from './Dashboard/Tabs/LibraryTab.vue'
 import NewsPage from './Dashboard/Tabs/NewsPage.vue'
 import LaunchingPopup from './LaunchingPopup.vue'
+import SettingsHomeTab from './Dashboard/settings/SettingsHomeTab.vue'
+import SettingsNav from './Dashboard/settings/SettingsNav.vue'
 
 export default {
   data() {
@@ -116,6 +128,7 @@ export default {
       messageColor: 'orange',
       messageMessage: '',
       LibraryshowPopup: false,
+      bIsInSettings: false,
       LibraryshowPopupFinal: false,
       BuildID: '0-CL'
     }
@@ -125,7 +138,8 @@ export default {
     HomeTab,
     LibraryTab,
     NewsPage,
-    LaunchingPopup
+    LaunchingPopup,
+    SettingsNav
   },
   props: {
     LoginResponse: {
@@ -134,17 +148,39 @@ export default {
     }
   },
   methods: {
+    GoBack() {
+      var temp = this.currentTab
+      var temp2 = this.TabName
+      // legit tells the launcher to hide ui and do effect
+      this.bIsInSettings = false;
+      this.currentTab = null
+      this.TabName = null
+      this.transitionName = ''
+      setTimeout(() => {
+        this.transitionName = 'slide-left'
+        this.TabName = temp
+        this.currentTab = temp2
+      }, 100)
+    },
     setTab(tab) {
       console.log(tab)
       if (tab != this.TabName) {
-        this.currentTab = null
-        this.TabName = null
-        this.transitionName = ''
-        setTimeout(() => {
-          this.transitionName = 'slide-left'
-          this.TabName = tab
-          this.currentTab = tab
-        }, 100)
+        if (tab == 'settings') {
+          console.log('OH NO SETTINGS!!')
+          setTimeout(() => {
+            this.bIsInSettings = true
+            this.transitionName = 'slide-left'
+          }, 100)
+        } else {
+          this.currentTab = null
+          this.TabName = null
+          this.transitionName = ''
+          setTimeout(() => {
+            this.transitionName = 'slide-left'
+            this.TabName = tab
+            this.currentTab = tab
+          }, 100)
+        }
       }
     },
     openFileExplorer() {

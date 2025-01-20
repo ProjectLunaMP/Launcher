@@ -71,7 +71,7 @@
      
         </div>
 
-        <div class="leftButton">
+        <div class="leftButton"  @click="$emit('changeTab', 'settings')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
