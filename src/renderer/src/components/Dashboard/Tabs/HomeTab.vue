@@ -79,7 +79,7 @@
     <h2>News & Updates</h2>
 
     <div class="AllNewsGrid">
-      <div v-for="(note, index) in newsData.PatchNotes" :key="index" class="news-item">
+      <div v-for="(note, index) in newsData.PatchNotes" :key="index" :style="{ backgroundImage: `url(${note.NewsImage})`}" class="news-item">
         <div @click="$emit('newsItem', index)" class="AllNewsGridItem">
           <span class="badge">NEW!</span>
           <div class="NewsGridContent">
@@ -91,6 +91,13 @@
     </div>
   </div>
 </template>
+
+<style>
+.news-item {
+    background: url('https://i.pinimg.com/736x/7f/ec/1f/7fec1f6bc2cbbb27d274a701119a2fb9.jpg') center center / cover no-repeat;
+    border-radius: 10px;
+}
+</style>
 
 <script>
 import imagePath from '../../../assets/tempplayer.png'

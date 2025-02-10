@@ -3,7 +3,7 @@
     <div class="inner-class">
       <div @click="$emit('back', 'home')" class="BackButton">Back</div>
 
-      <div class="NewsImage"></div>
+      <div class="NewsImage" :style="{ backgroundImage: `url(${newsData.NewsBanner})`}"></div>
 
       <div class="NewsContent" v-html="newsData.NewsContent"></div>
     </div>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     newsData: {
