@@ -55,6 +55,7 @@ onMounted(() => {
       })
 
       if (response.data) {
+        console.log(response.data)
         window.electron.ipcRenderer.send('luna:auth-data', token, response.data)
         console.log('SIMGA NIGMA ' + (await window.data.getAuthData()))
 
@@ -65,7 +66,7 @@ onMounted(() => {
         // sessionStorage.setItem('authData', JSON.stringify(response.data));
       }
     } catch (error) {
-      console.error('Error contacting backend:')
+      console.error('Error contacting backend: 2~' + error)
     }
   })
   //isLoading.value = false

@@ -11,7 +11,6 @@ import user, { login } from './login'
 //import axios from 'axios'
 
 let mainWindow: BrowserWindow | null
-let authData: AuthData | null = null
 
 //import dllinjector from '../../resources/dllinjector.node'
 import { existsSync, lstatSync, readFileSync, writeFileSync } from 'fs'
@@ -80,10 +79,11 @@ function createWindow(): void {
     })
 
     ipcMain.on('luna:auth-data', async (_, token: string, data: AuthData) => {
-      saveTokenToIni(token)
-      if (authData) {
+      saveTokenToIni(token);
+      if (data) {
         await user.login(data, token)
         //authData.AccessToken = token
+        console.log("VAILD LOGIN");
         mainWindow!.webContents.send('IsLoggedIn', true)
       }
     })

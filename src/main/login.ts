@@ -76,7 +76,7 @@ export async function login(mainWindow: BrowserWindow): Promise<AuthData | null>
       return user.user;
     }
   } catch (error) {
-    console.error('Error contacting backend:')
+    console.error('Error contacting backend: ' + error)
   }
 
   return null
