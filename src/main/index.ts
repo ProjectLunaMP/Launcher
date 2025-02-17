@@ -6,6 +6,7 @@ import { update } from './updatecheck'
 import { AuthData } from '../types/AuthData'
 import { saveTokenToIni } from './IniConfig'
 import user, { login } from './login'
+import { StartRPC } from './rpc'
 
 //import { spawn, execSync } from 'child_process'
 //import axios from 'axios'
@@ -39,6 +40,8 @@ function createWindow(): void {
       },
       resizable: false
     })
+
+    StartRPC(); // discord rpc!
 
     //  mainWindow.setMenu(null) // god
 

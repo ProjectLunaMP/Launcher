@@ -3,6 +3,7 @@ import { readTokenFromIni } from './IniConfig'
 import { AuthData } from '../types/AuthData'
 import { LauncherNews } from '../types/NewsData'
 import axios from 'axios'
+import { setActivity } from './rpc'
 
 class UserService {
   user: AuthData | null;
@@ -72,10 +73,12 @@ export async function login(mainWindow: BrowserWindow): Promise<AuthData | null>
     if (response.data) {
       await user.login(response.data, TOKEN);
       mainWindow!.webContents.send('IsLoggedIn', true)
+      setActivity(`Logged In as ${user.user?.username}`)
       //update-status
       return user.user;
     }
   } catch (error) {
+    setActivity(); // failed so defualt one
     console.error('Error contacting backend: ' + error)
   }
 
