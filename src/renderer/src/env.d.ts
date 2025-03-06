@@ -6,3 +6,9 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare global {
+  var BaseURL: string;
+}
+
+export {};

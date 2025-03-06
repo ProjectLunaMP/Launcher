@@ -48,7 +48,7 @@ onMounted(() => {
     console.log('Received token:', token)
 
     try {
-      const response = await axios.get('http://127.0.0.1:1111/launcher/api/v1/login', {
+      const response = await axios.get(`${window.application.BaseURL}/launcher/api/v1/login`, {
         headers: {
           Authorization: `${token}`
         }

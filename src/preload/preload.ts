@@ -15,6 +15,9 @@ declare global {
     data: {
       //setAuthData: (data: { token: string, username: string }) => void;
       getAuthData: () => Promise<{ token: string, username: string } | null>;
+    },
+    application: {
+       BaseURL: string
     }
   }
 }
@@ -32,6 +35,10 @@ if (process.contextIsolated) {
       getAuthData: () => electronAPI.ipcRenderer.invoke('luna:get-auth-data'),
     })
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('application', {
+        BaseURL: globalThis.BaseURL
+      }
+    )
   } catch (error) {
     console.error(error)
   }

@@ -26,6 +26,9 @@ function createWindow(): void {
   const preloadPath = join(__dirname, '../preload/preload.js')
   console.log('Preload script path:', preloadPath)
 
+  const IsProd = process.env.VITE_PROD === 'true';
+  globalThis.BaseURL = IsProd ? (process.env.VITE_API_PROD as string) : "http://127.0.0.1:1111"
+
   if (!mainWindow) {
     mainWindow = new BrowserWindow({
       width: 1270,
@@ -36,14 +39,16 @@ function createWindow(): void {
         preload: join(__dirname, '../preload/preload.js'),
         contextIsolation: true,
         nodeIntegration: false,
-        sandbox: false
+        sandbox: false,
+        
       },
       resizable: false
     })
 
     StartRPC(); // discord rpc!
 
-    //  mainWindow.setMenu(null) // god
+    if(IsProd)
+      mainWindow.setMenu(null) // god
 
     mainWindow.on('ready-to-show', () => {
       mainWindow!.show()
