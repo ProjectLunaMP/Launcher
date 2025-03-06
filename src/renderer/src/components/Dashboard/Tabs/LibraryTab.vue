@@ -68,7 +68,7 @@ export default {
       //const path = `file:///${buildPath.replace(/\\/g, '/')}/FortniteGame/Content/Splash/Splash.bmp`;
      // console.log(path);  
       return {
-        background: `url(http://127.0.0.1:3000/files/Splash.bmp) center center / cover no-repeat`,
+        background: `url(https://cdn.lunafn.org/files/Splash.bmp) center center / cover no-repeat`,
       };
     },
 
