@@ -13,7 +13,7 @@
       <div class="UserData">
         <div class="UserSection">
           <div class="BTClass">
-            <span class="UserBTValue">21</span>
+            <span class="UserBTValue">??</span>
             <span class="UserBTDec">Battle Pass Tier</span>
           </div>
 
@@ -21,7 +21,7 @@
         </div>
         <div class="UserSection">
           <div class="BTClass">
-            <span class="UserBTValue">21</span>
+            <span class="UserBTValue">??</span>
             <span class="UserBTDec">Season Level</span>
           </div>
 
@@ -51,13 +51,13 @@
           </div>
 
           <div class="SeasonNewsInfo">
-            <span class="SeasonNewsInfoName">Luna</span>
-            <span class="SeasonNewsInfoSeason">Season 3</span>
+            <span class="SeasonNewsInfoName">Season 3</span>
             <span class="SeasonNewsInfoDec">
               <span class="highlight">The Battle Rages On!</span>
               The island is thriving with chaos as new legends rise. With fresh outfits, 
               a space-themed Battle Pass, and fast-paced combat, 
               it's time to jump in and make your mark!
+             
             </span>
           </div>
 
@@ -109,7 +109,7 @@
 import imagePath from '../../../assets/tempplayer.png'
 import BPTierPath from '../../../assets/BPTier.png'
 import BPLevelPath from '../../../assets/BPLevel.png'
-import SeasonTempPath from '../../../assets/SeasonTemp.png'
+import SeasonTempPath from '../../../assets/SeasonTemp2.png'
 
 export default {
   props: {

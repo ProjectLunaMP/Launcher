@@ -38,7 +38,7 @@ try {
         'FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe'
     );
 
-    execSync('set OPENSSL_ia32cap=:~0x20000000')
+    execSync('set OPENSSL_ia32cap=:~0x20000000') // fixes old builds
     const gameProcess = spawn(
         gameExecutablePath,
         (
