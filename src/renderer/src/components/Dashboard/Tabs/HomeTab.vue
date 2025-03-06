@@ -6,7 +6,7 @@
           <div class="pl-icon" :style="profileStyle"><!--ICON--></div>
           <div class="text-container">
             <span class="greeting">Hi, {{ getData.username }}!</span>
-            <span class="description">Relive OG Fortnite <b>Season 2</b> with <b>Luna!</b></span>
+            <span class="description">Relive OG Fortnite <b>Season 3</b> with <b>Luna!</b></span>
           </div>
         </div>
       </div>
