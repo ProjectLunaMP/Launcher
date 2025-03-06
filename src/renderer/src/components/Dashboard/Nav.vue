@@ -55,8 +55,8 @@
           </svg>
         </div>
         <a class="BuildTitle">Public Build Available!</a>
-        <a class="BuildS">Season 2</a>
-        <a class="BuildB">1.11-CL-3807424</a>
+        <a class="BuildS">Season 3</a>
+        <a class="BuildB">3.6-CL-4019403</a>
         <a class="info-button">Download Now!</a>
       </div>
       <div class="split"></div>

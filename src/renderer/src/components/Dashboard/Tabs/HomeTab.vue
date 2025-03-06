@@ -46,23 +46,29 @@
                 />
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
               </svg>
-              <a>3:01</a>
+              <a>N/A</a>
             </div>
           </div>
 
           <div class="SeasonNewsInfo">
             <span class="SeasonNewsInfoName">Luna</span>
-            <span class="SeasonNewsInfoSeason">Season 2</span>
+            <span class="SeasonNewsInfoSeason">Season 3</span>
             <span class="SeasonNewsInfoDec">
-              <span class="highlight">Season 2, with the slogan</span>
-              Fort Knights, <span class="highlight">was the second season of </span>Fortnite: Battle
-              Royale.
+              <span class="highlight">The Battle Rages On!</span>
+              The island is thriving with chaos as new legends rise. With fresh outfits, 
+              a space-themed Battle Pass, and fast-paced combat, 
+              it's time to jump in and make your mark!
             </span>
           </div>
 
+          <!-- <span class="highlight">The Battle Rages On!</span>
+              Fort Knights, <span class="highlight">was the second season of </span>Fortnite: Battle
+              Royale.
+            </span>-->
+
           <div class="SeasonNewsLaunchContent">
             <span class="GameName">Fortnite</span>
-            <span class="GameVersion">1.11.0-CL-3807424</span>
+            <span class="GameVersion">3.6-CL-4019403</span>
 
             <a> Install </a>
           </div>
