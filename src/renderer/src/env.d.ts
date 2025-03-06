@@ -8,7 +8,7 @@ declare module '*.vue' {
 }
 
 declare global {
-  var BaseURL: string;
+  var MainBackend: string;
 }
 
 export {};

@@ -15,17 +15,18 @@ declare global {
     data: {
       //setAuthData: (data: { token: string, username: string }) => void;
       getAuthData: () => Promise<{ token: string, username: string } | null>;
+      getEnv: () => Promise<{ MainBackend: string } | null>;
     },
-    application: {
-       BaseURL: string
-    }
+    //application: {
+    //  MainBackend: string;
+    //};
   }
 }
 
 
 
 const api = {}
-
+console.log("preload")
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
@@ -33,12 +34,10 @@ if (process.contextIsolated) {
      // onAuthData: (callback: (data: AuthData) => void) =>
       //  electronAPI.ipcRenderer.on('luna:auth-data', (_, data: AuthData) => callback(data)),
       getAuthData: () => electronAPI.ipcRenderer.invoke('luna:get-auth-data'),
+      getEnv: () => electronAPI.ipcRenderer.invoke('luna:get-env'),
     })
     contextBridge.exposeInMainWorld('api', api)
-    contextBridge.exposeInMainWorld('application', {
-        BaseURL: globalThis.BaseURL
-      }
-    )
+    //contextBridge.exposeInMainWorld('application', electronAPI.ipcRenderer.invoke('luna:get-env'));
   } catch (error) {
     console.error(error)
   }

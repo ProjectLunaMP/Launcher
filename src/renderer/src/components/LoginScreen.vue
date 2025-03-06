@@ -44,7 +44,7 @@ export default {
     handleProceed() {
       this.waitingForCallback = true;
 
-      const discordLoginUrl = "https://discord.com/oauth2/authorize?client_id=1204822508373811282&response_type=code&redirect_uri=https%3A%2F%2Fbackend.lunafn.org%2Flauncher%2Fapi%2Fv1%2Fcallback&scope=email+identify+guilds";
+      const discordLoginUrl = "https://discord.com/oauth2/authorize?client_id=1204822508373811282&response_type=code&redirect_uri=https%3A%2F%2Fdashboard.lunafn.org%2Fauth%2Fapi%2Fv1%2Fcallback&scope=email+identify+guilds";
       window.open(discordLoginUrl, "_blank");
     },
   },

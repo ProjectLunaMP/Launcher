@@ -14,7 +14,7 @@ export async function update(mainWindow: BrowserWindow): Promise<boolean> {
   let DONTNeedUpdate = false;
   try{
     
-    await axios.get(`${globalThis.BaseURL}/launcher/api/v1/version`).then(response => {
+    await axios.get(`${globalThis.MainBackend}/launcher/api/v1/version`).then(response => {
       if(response.data){
         console.log(response.data);
         if(response.data.LauncherVersion === getAppVersion()) {

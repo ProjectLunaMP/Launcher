@@ -48,7 +48,8 @@ onMounted(() => {
     console.log('Received token:', token)
 
     try {
-      const response = await axios.get(`${window.application.BaseURL}/launcher/api/v1/login`, {
+      const URLfr = await window.data.getEnv()
+      const response = await axios.get(`${URLfr?.MainBackend}/launcher/api/v1/login`, {
         headers: {
           Authorization: `${token}`
         }

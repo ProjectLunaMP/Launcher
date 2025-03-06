@@ -64,7 +64,8 @@ export async function login(mainWindow: BrowserWindow): Promise<AuthData | null>
   var TOKEN = readTokenFromIni()
   console.log('TOKEN ' + TOKEN)
   try {
-    const response = await axios.get(`${globalThis.BaseURL}/launcher/api/v1/login`, {
+    console.log(globalThis.MainBackend);
+    const response = await axios.get(`${globalThis.MainBackend}/launcher/api/v1/login`, {
       headers: {
         Authorization: `${TOKEN}`
       }
