@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const showPopup = ref(false);
 const UpdateText = ref("...")
@@ -17,6 +17,10 @@ onMounted(() => {
       showPopup.value = false;
   });
 });
+
+onUnmounted(() => {
+  window.electron.ipcRenderer.removeListener('gameStatus', handleGameStatus);
+});
 </script>
 
 <template>
@@ -24,7 +28,7 @@ onMounted(() => {
   <div v-if="showPopup" class="popup-overlay">
     <div @click.stop class="popup-content">
       <span class="PopupTitle">Game is launching! ~ TDB</span>
-      <p>{{ UpdateText.value }}</p>
+      <p>{{ UpdateText }}</p>
       <div>Close</div>
     </div>
   </div>
