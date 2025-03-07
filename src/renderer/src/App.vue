@@ -19,11 +19,11 @@ window.electron.ipcRenderer.invoke('luna:update').then(async (e) => {
   await window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
     LoginData.value = LoginResponse
   })
+  IsLoggedIn.value = true
 })
 
 
 // WIP (seeing what i can do)
-//const ipcHandle = () => window.electron.ipcRenderer.send('ping') //  <a target="_blank" rel="noreferrer" @click="ipcHandle">Send IPC</a>
 
 // REMOVE FOR PROD THIS IS TO SKIP STUFF
 onMounted(() => {
@@ -63,6 +63,8 @@ onMounted(() => {
         window.electron.ipcRenderer.invoke('luna:get-auth-data').then((LoginResponse) => {
           LoginData.value = LoginResponse
         })
+
+        
 
         // sessionStorage.setItem('authData', JSON.stringify(response.data));
       }

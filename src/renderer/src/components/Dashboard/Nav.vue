@@ -66,8 +66,8 @@
         </div>
 
         <div class="profile-details">
-          <span class="username">{{ user.username }}</span>
-          <span class="role" :style="roleStyle">{{ user.RoleName }}</span>
+          <span class="username">{{ user?.username || "User" }}</span>
+          <span class="role" :style="roleStyle">{{ user?.RoleName || "hi" }}</span>
      
         </div>
 
@@ -110,7 +110,7 @@ export default {
       }
     },
     roleStyle() {
-      return { color: this.LoginResponse.RoleColor }
+      return { color: this.LoginResponse?.RoleColor || "#FFFFFF" }
     },
     user() {
       //console.log("RIZZLER " + JSON.stringify(this.LoginResponse))

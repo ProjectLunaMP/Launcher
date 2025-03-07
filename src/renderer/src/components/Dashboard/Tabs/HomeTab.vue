@@ -5,7 +5,7 @@
         <div class="inner-div">
           <div class="pl-icon" :style="profileStyle"><!--ICON--></div>
           <div class="text-container">
-            <span class="greeting">Hi, {{ getData.username }}!</span>
+            <span class="greeting">Hi, {{ getData?.username || "User" }}!</span>
             <span class="description">Relive OG Fortnite <b>Season 3</b> with <b>Luna!</b></span>
           </div>
         </div>
@@ -82,7 +82,7 @@
   </div>
 
   <div class="AllNews">
-    <h2>News & Updates</h2>
+    <h2>Developer Posts</h2>
 
     <div class="AllNewsGrid">
       <div v-for="(note, index) in newsData.PatchNotes" :key="index" :style="{ backgroundImage: `url(${note.NewsImage})`}" class="news-item">
@@ -131,7 +131,7 @@ export default {
     },
     profileStyle() {
       return {
-        backgroundImage: `url(${this.getData.character})`
+        backgroundImage: `url(${this.getData?.character})`
       }
     },
     BpTier() {

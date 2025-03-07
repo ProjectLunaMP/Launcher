@@ -24,6 +24,10 @@ function search(src: Buffer, pattern: Buffer): number[] {
 }
 
 export async function getBuildVersion(exePath: string): Promise<string> {
+
+    // TODO just allow certain fortnite builds in the launcher!
+    // with file hash instead
+
     let result = '';
     const numThreads = require('os').cpus().length;
     let allMatchingPos: number[] = [];

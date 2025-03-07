@@ -105,16 +105,21 @@ function createWindow(): void {
 
     ipcMain.on('luna:launchgame', (_, { gameExePath }) => {
       setImmediate(() => {
-        mainWindow?.webContents.send('gameStatus', { Launching: true })
-
         const lunaFolderPath = join(app.getPath('userData'), 'Luna')
         const dllPath = join(lunaFolderPath, 'FortCurl.dll')
+
+        mainWindow?.webContents.send('gameStatus', { 
+          Launching: false,
+          Type: "DLL"
+        })
+
+      
         //
         const workerOptions: WorkerOptions = {
           workerData: { gameExePath, dllPath, user: user }
         }
 
-        const worker = new Worker(path.join(__dirname, '_gameWorker.js'), workerOptions)
+       /* const worker = new Worker(path.join(__dirname, '_gameWorker.js'), workerOptions)
 
         worker.on('message', (message) => {
           if (message.status === 'success') {
@@ -136,7 +141,7 @@ function createWindow(): void {
           if (code !== 0) {
             console.error(`Worker stopped with exit code ${code}`)
           }
-        })
+        })*/
       })
       console.log('PORN!')
     })
