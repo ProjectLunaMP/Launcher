@@ -19,7 +19,7 @@ window.electron.ipcRenderer.invoke('luna:update').then(async (e) => {
   await window.electron.ipcRenderer.invoke('luna:login').then((LoginResponse) => {
     LoginData.value = LoginResponse
   })
-  IsLoggedIn.value = true
+  //IsLoggedIn.value = true
 })
 
 

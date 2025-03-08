@@ -13,10 +13,9 @@ export async function setActivity(State = "In Launcher") {
         //smallImageKey: "luna_new",
         //smallImageText: "Luna",
         instance: false,
-        // verified apps only show buttons so this wont even work
         buttons: [
             {
-                label: "Join Discord", 
+                label: "Join Discord",
                 url: "https://discord.gg/nkQHAjgmzv",
             },
         ],

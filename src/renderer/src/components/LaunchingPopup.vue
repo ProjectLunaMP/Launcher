@@ -6,11 +6,19 @@ const showPopup = ref(false);
 const UpdateText = ref("...")
 
 onMounted(() => {
-  window.electron.ipcRenderer.on('gameStatus', (_, { Launching, Type }) => {
+  window.electron.ipcRenderer.on('gameStatus', (_, { 
+    Launching, 
+    Type,
+    Message }) => {
     //showPopup.value = Launching;
-    if (Type == "DLL") {
+    if (Type == "Message") {
       showPopup.value = true;
-      UpdateText.value = "Downloading DLL"
+      //console.log(Progress);
+      UpdateText.value = `${Message}`
+    }
+    else if(Type == "Error")
+    {
+      UpdateText.value = "Failed :/"
     }
     console.log(Type);
     if (!Launching && Type == "")
@@ -18,9 +26,6 @@ onMounted(() => {
   });
 });
 
-onUnmounted(() => {
-  window.electron.ipcRenderer.removeListener('gameStatus', handleGameStatus);
-});
 </script>
 
 <template>

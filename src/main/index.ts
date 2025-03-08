@@ -14,20 +14,28 @@ import { StartRPC } from './rpc'
 let mainWindow: BrowserWindow | null
 
 //import dllinjector from '../../resources/dllinjector.node'
-import { existsSync, lstatSync, readFileSync, writeFileSync } from 'fs'
+import {
+  createWriteStream,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync
+} from 'fs'
 import { GrabNews } from './GrabNews'
 import { getBuildVersion } from './VersionSearcher'
 import { handleBuildConfig, TempBuildData } from './JsonConfig'
 import { FortniteDetect } from './FortniteDetect'
 import { Worker, WorkerOptions } from 'worker_threads'
+import { get } from 'https'
 
 function createWindow(): void {
   //registerProtocol()
   const preloadPath = join(__dirname, '../preload/preload.js')
   console.log('Preload script path:', preloadPath)
 
-  const IsProd = process.env.VITE_PROD === 'true';
-  globalThis.MainBackend = IsProd ? (process.env.VITE_API_PROD as string) : "http://127.0.0.1:1111"
+  const IsProd = process.env.VITE_PROD === 'true'
+  globalThis.MainBackend = IsProd ? (process.env.VITE_API_PROD as string) : 'http://127.0.0.1:1111'
 
   if (!mainWindow) {
     mainWindow = new BrowserWindow({
@@ -44,10 +52,9 @@ function createWindow(): void {
       resizable: false
     })
 
-    StartRPC(); // discord rpc!
+    StartRPC() // discord rpc!
 
-    if(IsProd)
-      mainWindow.setMenu(null) // god
+    if (IsProd) mainWindow.setMenu(null) // god
 
     mainWindow.on('ready-to-show', () => {
       mainWindow!.show()
@@ -86,11 +93,11 @@ function createWindow(): void {
     })
 
     ipcMain.on('luna:auth-data', async (_, token: string, data: AuthData) => {
-      saveTokenToIni(token);
+      saveTokenToIni(token)
       if (data) {
         await user.login(data, token)
         //authData.AccessToken = token
-        console.log("VAILD LOGIN");
+        console.log('VAILD LOGIN')
         mainWindow!.webContents.send('IsLoggedIn', true)
       }
     })
@@ -108,40 +115,89 @@ function createWindow(): void {
         const lunaFolderPath = join(app.getPath('userData'), 'Luna')
         const dllPath = join(lunaFolderPath, 'FortCurl.dll')
 
-        mainWindow?.webContents.send('gameStatus', { 
-          Launching: false,
-          Type: "DLL"
-        })
-
-      
-        //
-        const workerOptions: WorkerOptions = {
-          workerData: { gameExePath, dllPath, user: user }
+        if (!existsSync(lunaFolderPath)) {
+          mkdirSync(lunaFolderPath, { recursive: true })
         }
-
-       /* const worker = new Worker(path.join(__dirname, '_gameWorker.js'), workerOptions)
-
-        worker.on('message', (message) => {
-          if (message.status === 'success') {
-            console.log('Game launched successfully!')
-            //event.sender.send('luna:gameStatus', 'Game launched successfully!')
-            mainWindow?.webContents.send('gameStatus', { Launching: false })
-          } else {
-            console.error('Error launching game:', message.message)
-            mainWindow?.webContents.send('gameStatus', { Launching: false })
-          }
+        mainWindow?.webContents.send('gameStatus', {
+          Launching: false,
+          Type: 'Message',
+          Message: `Downloading content 0%`
         })
 
-        worker.on('error', (error) => {
-          console.error('Worker error:', error)
-          mainWindow?.webContents.send('gameStatus', { Launching: false })
-        })
+        const file = createWriteStream(dllPath)
 
-        worker.on('exit', (code) => {
-          if (code !== 0) {
-            console.error(`Worker stopped with exit code ${code}`)
-          }
-        })*/
+        get('https://cdn.lunafn.org/files/0.0.1/FortCurl.dll', (response) => {
+          const totalSize = parseInt(response.headers['content-length'] || '0', 10)
+          let downloadedSize = 0
+
+          response.on('data', (chunk) => {
+            downloadedSize += chunk.length
+            const progress = ((downloadedSize / totalSize) * 100).toFixed(2)
+            console.log(progress)
+            mainWindow?.webContents.send('gameStatus', {
+              Launching: false,
+              Type: 'Message',
+              Message: `Downloading content ${progress}%`
+            })
+          })
+
+          response.pipe(file)
+
+          file.on('finish', () => {
+            file.close()
+            console.log('DLL Downloaded Successfully!')
+
+            mainWindow?.webContents.send('gameStatus', {
+              Launching: false,
+              Type: 'Message',
+              Message: "Launching"
+            })
+
+            const workerOptions: WorkerOptions = {
+              workerData: { gameExePath, dllPath, user: user }
+            }
+
+            const worker = new Worker(path.join(__dirname, '_gameWorker.js'), workerOptions)
+
+            worker.on('message', (message) => {
+              if (message.status === 'success') {
+                console.log('Game launched successfully!')
+                mainWindow?.webContents.send('gameStatus', { 
+                  Launching: false,
+                  Type: '',
+                })
+              } else {
+                console.error('Error launching game:', message.message)
+                mainWindow?.webContents.send('gameStatus', { 
+                  Launching: false,
+                  Type: 'Error',
+                })
+              }
+            })
+
+            worker.on('error', (error) => {
+              console.error('Worker error:', error)
+              mainWindow?.webContents.send('gameStatus', { 
+                Launching: false,
+                Type: 'Error',
+              })
+            })
+
+            worker.on('exit', (code) => {
+              if (code !== 0) {
+                console.error(`Worker stopped with exit code ${code}`)
+              }
+            })
+          })
+        }).on('error', (err) => {
+          console.error('Download Failed:', err.message)
+          mainWindow?.webContents.send('gameStatus', {
+            Launching: false,
+            Type: 'Error',
+            Progress: 0
+          })
+        })
+        //
       })
       console.log('PORN!')
     })
@@ -185,10 +241,10 @@ function createWindow(): void {
     })
 
     ipcMain.handle('luna:get-env', () => {
-      const IsProd = process.env.VITE_PROD === 'true';
-      const apiUrl = IsProd ? process.env.VITE_API_PROD : 'http://127.0.0.1:1111';
-      return { MainBackend: apiUrl };
-    });
+      const IsProd = process.env.VITE_PROD === 'true'
+      const apiUrl = IsProd ? process.env.VITE_API_PROD : 'http://127.0.0.1:1111'
+      return { MainBackend: apiUrl }
+    })
 
     ipcMain.handle('luna:addpathV2', async (_) => {
       var Response = await handleBuildConfig(
@@ -197,9 +253,9 @@ function createWindow(): void {
         TempBuildData.buildPath
       )
 
-      console.log(Response);
+      console.log(Response)
 
-      return Response;
+      return Response
     })
 
     ipcMain.handle('dialog:openFile', async () => {
